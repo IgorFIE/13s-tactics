@@ -97,6 +97,9 @@ const initHandlers = () => {
     document.onmousemove = (event) => {
         game.update(event.pageX, event.pageY);
     }
+    document.onmousedown = (event) => {
+        game.click(event.pageX, event.pageY);
+    }
 }
 
 const gameLoop = () => {
@@ -104,7 +107,7 @@ const gameLoop = () => {
     if (elapsed > fpsInterval) {
         then = Date.now() - (elapsed % fpsInterval);
         GameVars.deltaTime = elapsed / 1000;
-        updateFps(then);
+        // updateFps(then);
         game.draw();
     }
     window.requestAnimationFrame(() => gameLoop());

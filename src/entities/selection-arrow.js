@@ -1,0 +1,14 @@
+import { toPixelSize } from "../game-variables";
+import { SelectedArrow } from "../sprites/interaction-arrows";
+import { drawSprite } from "../utilities/draw-utilities";
+
+export class SelectionArrow {
+    constructor() {
+        this.x = 9;
+        this.y = -12;
+    }
+
+    draw(tileX, tileY, ctx) {
+        drawSprite(ctx, SelectedArrow, toPixelSize(1), tileX + this.x, tileY + this.y);
+    }
+}

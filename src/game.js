@@ -16,21 +16,28 @@ export class Game {
         this.board = new Board(this.gameDiv);
 
         this.board.createCharacter(6, 1, CharacterType.SHIELD, DirectionType.UP, true);
-        this.board.createCharacter(5, 2, CharacterType.SHIELD, DirectionType.RIGHT, true);
-        this.board.createCharacter(6, 3, CharacterType.SHIELD, DirectionType.DOWN, true);
-        this.board.createCharacter(7, 2, CharacterType.SHIELD, DirectionType.LEFT, true);
+        // this.board.createCharacter(5, 2, CharacterType.SHIELD, DirectionType.LEFT, true);
+        // this.board.createCharacter(6, 3, CharacterType.SHIELD, DirectionType.DOWN, true);
+        // this.board.createCharacter(7, 2, CharacterType.SHIELD, DirectionType.RIGHT, true);
+
+        this.board.selectedCharacter = this.board.boardTiles[1][6].character;
+        this.board.select();
 
         this.board.createCharacter(2, 4, CharacterType.RANGE, DirectionType.UP, true);
-        this.board.createCharacter(1, 5, CharacterType.RANGE, DirectionType.RIGHT, true);
-        this.board.createCharacter(2, 6, CharacterType.RANGE, DirectionType.DOWN, true);
-        this.board.createCharacter(3, 5, CharacterType.RANGE, DirectionType.LEFT, true);
+        // this.board.createCharacter(1, 5, CharacterType.RANGE, DirectionType.LEFT, true);
+        // this.board.createCharacter(2, 6, CharacterType.RANGE, DirectionType.DOWN, true);
+        // this.board.createCharacter(3, 5, CharacterType.RANGE, DirectionType.RIGHT, true);
 
         this.board.createCharacter(6, 5, CharacterType.MELEE, DirectionType.UP, true);
-        this.board.createCharacter(5, 6, CharacterType.MELEE, DirectionType.RIGHT, true);
-        this.board.createCharacter(6, 7, CharacterType.MELEE, DirectionType.DOWN, true);
-        this.board.createCharacter(7, 6, CharacterType.MELEE, DirectionType.LEFT, true);
+        // this.board.createCharacter(5, 6, CharacterType.MELEE, DirectionType.LEFT, true);
+        // this.board.createCharacter(6, 7, CharacterType.MELEE, DirectionType.DOWN, true);
+        // this.board.createCharacter(7, 6, CharacterType.MELEE, DirectionType.RIGHT, true);
 
         this.ui = new UI(this);
+    }
+
+    click(x, y) {
+        this.board.click(x, y);
     }
 
     update(x, y) {

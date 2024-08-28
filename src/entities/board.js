@@ -1,3 +1,4 @@
+import { DirectionType } from "../enum/direction-type";
 import { TileType } from "../enum/tile-type";
 import { GameVars, removePixelSize, toPixelSize } from "../game-variables";
 import { createPixelLine, fillPolygon } from "../utilities/draw-utilities";
@@ -13,6 +14,7 @@ export class Board {
         this.createGameBoard();
         this.resetBoardPos();
         this.dragElement(this);
+        this.selectedCharacter = null;
     }
 
     createBackground() {
@@ -56,18 +58,20 @@ export class Board {
     }
 
     generateGameBoard() {
-        const startY = (GameVars.tileYRatio * GameVars.gameBoardSize) - GameVars.tileYRatio;
+        const startX = (GameVars.tileXRatio * GameVars.gameBoardSize) - GameVars.tileXRatio;
         const boardTiles = [];
         for (let y = 0; y < GameVars.gameBoardSize; y++) {
             boardTiles.push([]);
-            for (let x = GameVars.gameBoardSize - 1; x >= 0; x--) {
+            for (let x = 0; x < GameVars.gameBoardSize; x++) {
                 boardTiles[y].push(new Tile(
-                    x * GameVars.tileXRatio + (y * GameVars.tileXRatio),
-                    startY - (x * GameVars.tileYRatio) + (y * GameVars.tileYRatio),
+                    x, y,
+                    startX - (y * GameVars.tileXRatio) + (x * GameVars.tileXRatio),
+                    (x * GameVars.tileYRatio) + (y * GameVars.tileYRatio),
                     x == 4 && y == 4 ? TileType.WALL : TileType.FLOOR, this.boardCtx)
                 );
             }
         }
+        console.log("potato");
         return boardTiles;
     }
 
@@ -85,6 +89,75 @@ export class Board {
 
     createCharacter(x, y, characterType, directionType, isPlayer) {
         this.boardTiles[y][x].character = new Character(x, y, characterType, directionType, isPlayer);
+    }
+
+    click(x, y) {
+        let targetTile = this.retrieveTargetTile(x, y);
+        if (this.selectedCharacter && targetTile) {
+            //clean selection
+            this.boardTiles.forEach(row => row.forEach(tile => tile.click(0, 0)));
+
+            // clean character in it's current pos
+            this.boardTiles[this.selectedCharacter.y][this.selectedCharacter.x].character = null;
+
+            // move char
+            this.selectedCharacter.updatePos(targetTile.boardX, targetTile.boardY)
+
+            // set char on new pos
+            this.boardTiles[this.selectedCharacter.y][this.selectedCharacter.x].character = this.selectedCharacter;
+
+            // new select
+            this.select();
+        } else {
+            this.selectedCharacter = null;
+            this.boardTiles.forEach(row => row.forEach(tile => {
+                if (tile.click(x, y)) {
+                    this.selectedCharacter = tile.character;
+                }
+            }));
+            this.select();
+        }
+    }
+
+    retrieveTargetTile(x, y) {
+        let targetTile = null;
+        this.boardTiles.forEach(row => {
+            row.forEach(tile => {
+                if (tile.canMoveTo(x, y)) {
+                    targetTile = tile;
+                    return;
+                }
+            });
+            if (targetTile) return;
+        });
+        return targetTile;
+    }
+
+    select() {
+        if (this.selectedCharacter) {
+            const x = this.selectedCharacter.x;
+            const y = this.selectedCharacter.y;
+            this.boardTiles[y][x].select();
+
+            const dist = GameVars.characterStatus[this.selectedCharacter.characterType].dist;
+
+            let hasObstacleUp, hasObstacleDown, hasObstacleLeft, hasObstacleRight;
+            for (let i = 1; i <= dist; i++) {
+                if (!hasObstacleUp && (y - i < 0 || this.validateCollision(x, y - i))) hasObstacleUp = true;
+                if (!hasObstacleDown && (y + i >= GameVars.gameBoardSize || this.validateCollision(x, y + i))) hasObstacleDown = true;
+                if (!hasObstacleLeft && (x - i < 0 || this.validateCollision(x - i, y))) hasObstacleLeft = true;
+                if (!hasObstacleRight && (x + i >= GameVars.gameBoardSize || this.validateCollision(x + i, y))) hasObstacleRight = true;
+
+                if (!hasObstacleUp) this.boardTiles[y - i][x].select(DirectionType.UP);
+                if (!hasObstacleDown) this.boardTiles[y + i][x].select(DirectionType.DOWN);
+                if (!hasObstacleLeft) this.boardTiles[y][x - i].select(DirectionType.LEFT);
+                if (!hasObstacleRight) this.boardTiles[y][x + i].select(DirectionType.RIGHT);
+            }
+        }
+    }
+
+    validateCollision(x, y) {
+        return this.boardTiles[y][x].tileType === TileType.WALL || this.boardTiles[y][x].character;
     }
 
     update(x, y) {

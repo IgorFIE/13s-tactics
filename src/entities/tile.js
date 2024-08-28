@@ -1,16 +1,24 @@
 import { TileType } from "../enum/tile-type";
 import { GameVars, toPixelSize } from "../game-variables";
 import { createPixelLine, fillPolygon } from "../utilities/draw-utilities";
+import { DirectionArrow } from "./direction-arrow";
 import { Point } from "./Point";
 import { Polygon } from "./polygon";
+import { SelectionArrow } from "./selection-arrow";
 
 export class Tile {
-    constructor(x, y, tileType, ctx) {
+    constructor(boardX, boardY, x, y, tileType, ctx) {
+        this.boardX = boardX;
+        this.boardY = boardY;
         this.x = x;
         this.y = y;
+
         this.character = null;
+        this.directionArrow = new DirectionArrow();
+        this.selectionArrow = new SelectionArrow();
 
         this.isHighlight = false;
+        this.isSelected = false;
 
         this.xRatio = GameVars.tileXRatio;
         this.yRatio = GameVars.tileYRatio;
@@ -61,6 +69,20 @@ export class Tile {
         createPixelLine(this.x, this.y + this.yRatio + this.depth, this.x + this.xRatio, this.y + (this.yRatio * 2) + this.depth, this.tileType == TileType.WALL ? "#38252e" : "#3e3846", toPixelSize(1), this.leftLines);
     }
 
+    click(x, y) {
+        this.isSelected = this.character && this.collisionObj.isPointInsidePolygon(x, y);
+        return this.isSelected;
+    }
+
+    canMoveTo(x, y) {
+        return this.isSelected && this.collisionObj.isPointInsidePolygon(x, y);
+    }
+
+    select(direction) {
+        this.isSelected = true;
+        this.directionArrow.direction = direction;
+    }
+
     update(x, y) {
         this.isHighlight = this.collisionObj.isPointInsidePolygon(x, y);
     }
@@ -76,13 +98,18 @@ export class Tile {
     }
 
     drawMiddle() {
-        if (this.isHighlight) {
-            fillPolygon(this.topLines, "#ffff5766", this.ctx);
-            this.topLines.forEach(pixel => pixel.draw(this.ctx, "#ffff57"));
-        }
+        if (this.isSelected) this.drawHighlight("#52804d");
+        if (this.isHighlight) this.drawHighlight("#ffff57");
+        if (this.isSelected) this.directionArrow.draw(this.x, this.y, this.ctx);
+    }
+
+    drawHighlight(color) {
+        fillPolygon(this.topLines, color + "66", this.ctx);
+        this.topLines.forEach(pixel => pixel.draw(this.ctx, color));
     }
 
     drawFront() {
         this.character?.draw(this.x, this.y, this.ctx);
+        if (this.isSelected && this.character) this.selectionArrow.draw(this.x, this.y, this.ctx);
     }
 }

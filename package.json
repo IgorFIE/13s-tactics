@@ -1,0 +1,21 @@
+{
+  "name": "13s-tactics",
+  "version": "1.0.0",
+  "description": "js13k 2024 game",
+  "scripts": {
+    "start": "webpack serve --open",
+    "build": "npx webpack --config webpack.config.js",
+    "compress": "npx roadroller ./dist/main.js -o ./dist/main.js"
+  },
+  "author": "Igor Estevao",
+  "license": "UNLICENSED",
+  "devDependencies": {
+    "terser-webpack-plugin": "^5.3.9",
+    "webpack": "^5.50.0",
+    "webpack-cli": "^4.7.2",
+    "webpack-dev-server": "^4.1.0"
+  },
+  "dependencies": {
+    "roadroller": "^2.1.0"
+  }
+}

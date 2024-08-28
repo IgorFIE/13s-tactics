@@ -5,9 +5,10 @@ import { Point } from "./Point";
 import { Polygon } from "./polygon";
 
 export class Tile {
-    constructor(x, y, tileType, canvas) {
+    constructor(x, y, tileType, ctx) {
         this.x = x;
         this.y = y;
+        this.character = null;
 
         this.isHighlight = false;
 
@@ -18,8 +19,7 @@ export class Tile {
         this.height = tileType == TileType.WALL ? GameVars.tileWallHeight : 0;
         this.tileType = tileType;
 
-        this.canvas = canvas;
-        this.ctx = canvas.getContext("2d");
+        this.ctx = ctx;
 
         this.createTopLines();
         this.createLeftLines();
@@ -61,29 +61,11 @@ export class Tile {
         createPixelLine(this.x, this.y + this.yRatio + this.depth, this.x + this.xRatio, this.y + (this.yRatio * 2) + this.depth, this.tileType == TileType.WALL ? "#38252e" : "#3e3846", toPixelSize(1), this.leftLines);
     }
 
-    interact(x, y) {
-        if (this.collisionObj.isPointInsidePolygon(x, y)) {
-            if (!this.isHighlight) {
-                this.isHighlight = true;
-                this.highlight();
-            }
-        } else if (this.isHighlight) {
-            this.isHighlight = false;
-            this.reset();
-        }
+    update(x, y) {
+        this.isHighlight = this.collisionObj.isPointInsidePolygon(x, y);
     }
 
-    highlight() {
-        fillPolygon(this.topLines, "#ffff5766", this.ctx);
-        this.topLines.forEach(pixel => pixel.draw(this.ctx, "#ffff57"));
-    }
-
-    reset() {
-        fillPolygon(this.topLines, this.tileType == TileType.WALL ? "#edeef7" : "#686b7a", this.ctx);
-        this.topLines.forEach(pixel => pixel.draw(this.ctx));
-    }
-
-    draw() {
+    drawBack() {
         fillPolygon(this.leftLines, this.tileType == TileType.WALL ? "#3e3846" : "#38252e", this.ctx);
         fillPolygon(this.rightLines, this.tileType == TileType.WALL ? "#1b1116" : "#2f1519", this.ctx);
         fillPolygon(this.topLines, this.tileType == TileType.WALL ? "#edeef7" : "#686b7a", this.ctx);
@@ -91,5 +73,16 @@ export class Tile {
         this.leftLines.forEach(pixel => pixel.draw(this.ctx));
         this.rightLines.forEach(pixel => pixel.draw(this.ctx));
         this.topLines.forEach(pixel => pixel.draw(this.ctx));
+    }
+
+    drawMiddle() {
+        if (this.isHighlight) {
+            fillPolygon(this.topLines, "#ffff5766", this.ctx);
+            this.topLines.forEach(pixel => pixel.draw(this.ctx, "#ffff57"));
+        }
+    }
+
+    drawFront() {
+        this.character?.draw(this.x, this.y, this.ctx);
     }
 }

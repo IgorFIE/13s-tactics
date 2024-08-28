@@ -1,3 +1,7 @@
+import { Point } from "../entities/Point";
+import { CharacterType } from "../enum/character-type";
+import { DirectionType } from "../enum/direction-type";
+
 // change to be text based
 export const PlayerSwatColors = {
     "wl": "#9bf2fa",
@@ -164,3 +168,24 @@ export const MeleeSwatBottom = [
     [null, null, null, "#000000", "cd", "cd", "#000000", null, "#000000", "#000000", "#000000", null, null, null],
     [null, null, null, null, "#000000", "#000000", "#000000", null, null, null, null, null, null, null],
 ];
+
+export const SwatSpritePos = {
+    [CharacterType.SHIELD]: {
+        [DirectionType.UP]: new Point(4, -7),
+        [DirectionType.RIGHT]: new Point(9, -7),
+        [DirectionType.DOWN]: new Point(8, -3),
+        [DirectionType.LEFT]: new Point(4, -3),
+    },
+    [CharacterType.RANGE]: {
+        [DirectionType.UP]: new Point(5, -2),
+        [DirectionType.RIGHT]: new Point(9, -2),
+        [DirectionType.DOWN]: new Point(8, -2),
+        [DirectionType.LEFT]: new Point(5, -2),
+    },
+    [CharacterType.MELEE]: {
+        [DirectionType.UP]: new Point(6, -4),
+        [DirectionType.RIGHT]: new Point(6, -4),
+        [DirectionType.DOWN]: new Point(9, -2),
+        [DirectionType.LEFT]: new Point(4, -2),
+    }
+};

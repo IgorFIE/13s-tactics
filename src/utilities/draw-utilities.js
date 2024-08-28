@@ -1,8 +1,7 @@
 import { Pixel } from "../entities/pixel";
 import { Triangle } from "../entities/triangle";
 
-export const drawSprite = (canvas, sprite, pixelSize = 1, startX = 0, startY = 0, colorIds = null, invertX = false, invertY = false) => {
-    const ctx = canvas.getContext("2d");
+export const drawSprite = (ctx, sprite, pixelSize = 1, startX = 0, startY = 0, colorIds = null, invertX = false, invertY = false) => {
     sprite.forEach((row, y) => {
         y = invertY ? row.length - 1 - y : y;
         row.forEach((val, x) => {

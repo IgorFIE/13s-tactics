@@ -7,8 +7,8 @@ export class UI {
     constructor(game) {
         this.game = game;
         this.uiDiv = createElem(this.game.gameDiv, "div", "ui");
-        // this.createTimer();
-        // this.createZoomBtns();
+        this.createTimer();
+        this.createZoomBtns();
         this.createResetBtn();
     }
 

@@ -2,6 +2,7 @@ import { TileType } from "../enum/tile-type";
 import { GameVars, removePixelSize, toPixelSize } from "../game-variables";
 import { createPixelLine, fillPolygon } from "../utilities/draw-utilities";
 import { createElem, setElemSize } from "../utilities/elem-utilities";
+import { Character } from "./character";
 import { Tile } from "./tile";
 
 export class Board {
@@ -46,12 +47,12 @@ export class Board {
 
     createGameBoard() {
         this.boardCanvas = createElem(this.gameDiv, "canvas", "board", [], null, null, GameVars.isMobile);
+        this.boardCtx = this.boardCanvas.getContext("2d");
         setElemSize(this.boardCanvas,
             toPixelSize(GameVars.tileXRatio * GameVars.gameBoardSize * 2 + 1),
             toPixelSize(GameVars.tileYRatio * GameVars.gameBoardSize * 2 + 1 + GameVars.tileDepth)
         );
         this.boardTiles = this.generateGameBoard();
-        this.boardTiles.forEach(tileRow => tileRow.forEach(tile => tile.draw()));
     }
 
     generateGameBoard() {
@@ -63,7 +64,7 @@ export class Board {
                 boardTiles[y].push(new Tile(
                     x * GameVars.tileXRatio + (y * GameVars.tileXRatio),
                     startY - (x * GameVars.tileYRatio) + (y * GameVars.tileYRatio),
-                    TileType.FLOOR, this.boardCanvas)
+                    x == 4 && y == 4 ? TileType.WALL : TileType.FLOOR, this.boardCtx)
                 );
             }
         }
@@ -82,11 +83,19 @@ export class Board {
         this.boardShadowCanvas.style.translate = x + 'px ' + (y + toPixelSize(GameVars.tileYRatio + GameVars.tileDepth)) + 'px';
     }
 
-    interact(x, y) {
-        this.boardTiles.forEach(row => row.forEach(tile => tile.interact(x, y)))
+    createCharacter(x, y, characterType, directionType, isPlayer) {
+        this.boardTiles[y][x].character = new Character(x, y, characterType, directionType, isPlayer);
+    }
+
+    update(x, y) {
+        this.boardTiles.forEach(row => row.forEach(tile => tile.update(x, y)))
     }
 
     draw() {
+        this.boardCtx.clearRect(0, 0, this.boardCanvas.width, this.boardCanvas.height);
+        this.boardTiles.forEach(tileRow => tileRow.forEach(tile => tile.drawBack()));
+        this.boardTiles.forEach(tileRow => tileRow.forEach(tile => tile.drawMiddle()));
+        this.boardTiles.forEach(tileRow => tileRow.forEach(tile => tile.drawFront()));
     }
 
     dragElement(board) {

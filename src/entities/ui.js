@@ -28,7 +28,7 @@ export class UI {
         this.timer = createElem(this.uiDiv, "canvas", null, null, toPixelSize(52), toPixelSize(34));
         this.timer.style.translate = ((GameVars.gameW - this.timer.width) / 2) + 'px ' + (toPixelSize(8)) + 'px';
         genSmallBox(this.timer, 0, 0, 51, 33, toPixelSize(1), "#3e3846", "#1b1116");
-        drawPixelTextInCanvas("TIME", this.timer, toPixelSize(1), 26, 8, "#9bf2fa", 1);
+        drawPixelTextInCanvas("TIME", this.timer, toPixelSize(1), 26, 8, "#00bcd4", 1);
         drawPixelTextInCanvas("13", this.timer, toPixelSize(1), 26, 21, "#9bf2fa", 3);
     }
 
@@ -37,7 +37,7 @@ export class UI {
         this.zoom = createElem(this.zoomDiv, "canvas", null, null, toPixelSize(26), toPixelSize(61));
         this.zoom.style.translate = (GameVars.gameW - this.zoom.width - toPixelSize(8)) + 'px ' + ((GameVars.gameH - this.zoom.height) / 2) + 'px';
         genSmallBox(this.zoom, 0, 0, 25, 60, toPixelSize(1), "#3e3846", "#1b1116");
-        drawPixelTextInCanvas("ZOOM", this.zoom, toPixelSize(1), 13, 8, "#9bf2fa", 1);
+        drawPixelTextInCanvas("ZOOM", this.zoom, toPixelSize(1), 13, 8, "#00bcd4", 1);
 
         this.zoomPlus = createElem(this.zoomDiv, "canvas", null, null, toPixelSize(18), toPixelSize(18), GameVars.isMobile, null, () => console.log("pixel up"));
         this.zoomPlus.style.translate = (GameVars.gameW - this.zoom.width - toPixelSize(4)) + 'px ' + (((GameVars.gameH - this.zoom.height) / 2) + toPixelSize(15)) + 'px';

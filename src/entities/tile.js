@@ -70,7 +70,7 @@ export class Tile {
     }
 
     click(x, y) {
-        this.isSelected = this.character && this.collisionObj.isPointInsidePolygon(x, y);
+        this.isSelected = !!this.character && this.collisionObj.isPointInsidePolygon(x, y);
         return this.isSelected;
     }
 

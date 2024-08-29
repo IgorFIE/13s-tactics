@@ -2,14 +2,18 @@ import { GameVars, toPixelSize } from "../game-variables";
 import { genSmallBox } from "../utilities/box-generator";
 import { createElem } from "../utilities/elem-utilities";
 import { drawPixelTextInCanvas } from "../utilities/text";
+import { UiCharacter } from "./ui-character";
 
 export class UI {
     constructor(game) {
         this.game = game;
-        this.uiDiv = createElem(this.game.gameDiv, "div", "ui");
+        this.uiDiv = createElem(document.getElementById("game"), "div", "ui");
+        this.uiCharacters = [];
+
         this.createTimer();
         this.createZoomBtns();
         this.createResetBtn();
+        this.createCharacterIcons();
     }
 
     createResetBtn() {
@@ -44,5 +48,24 @@ export class UI {
         this.zoomMinus.style.translate = (GameVars.gameW - this.zoom.width - toPixelSize(4)) + 'px ' + (((GameVars.gameH - this.zoom.height) / 2) + toPixelSize(37)) + 'px';
         genSmallBox(this.zoomMinus, 0, 0, 17, 17, toPixelSize(1), "#3e3846", "#1b1116");
         drawPixelTextInCanvas("-", this.zoomMinus, toPixelSize(1), 9, 9, "#9bf2fa", 4);
+    }
+
+    createCharacterIcons() {
+        this.charactersDiv = createElem(this.uiDiv, "div");
+
+        let yStartPos = (GameVars.gameH - toPixelSize(32 * 3) - toPixelSize(4 * 2)) / 2;
+        let index = 0;
+        for (let key in this.game.playerCharacters) {
+            this.uiCharacters.push(new UiCharacter(toPixelSize(8), yStartPos + (toPixelSize(32) * index) + toPixelSize(4 * index), this.game.playerCharacters[key], this.charactersDiv, this.game));
+            index++;
+        }
+    }
+
+    update(character) {
+        this.uiCharacters.forEach(uiChar => uiChar.update(character));
+    }
+
+    draw() {
+        this.uiCharacters.forEach(uiChar => uiChar.draw());
     }
 }

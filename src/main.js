@@ -14,6 +14,7 @@ let mainMenuDiv;
 let mainMenuCanv;
 
 let gameDiv;
+let gameBoardDiv;
 
 let fpsInterval = 1000 / GameVars.fps;
 let then = Date.now();
@@ -26,6 +27,7 @@ const init = () => {
     mainMenuCanv = createElem(mainMenuDiv, "canvas");
 
     gameDiv = createElem(mainDiv, "div", "game");
+    gameBoardDiv = createElem(gameDiv, "div", "board-div")
 
     createFpsElement(mainDiv);
     GameVars.updatePixelSize(window.innerWidth, window.innerHeight);
@@ -86,7 +88,7 @@ const init = () => {
     // drawSprite(mainMenuCanv, MoveOptionArrow, toPixelSize(2), 10, 10, null, false, true);
     // drawSprite(mainMenuCanv, MoveOptionArrow, toPixelSize(2), 20, 10, null, true, true);
 
-    game = new Game(gameDiv);
+    game = new Game(gameBoardDiv);
     game.init();
     initHandlers();
 
@@ -94,10 +96,10 @@ const init = () => {
 }
 
 const initHandlers = () => {
-    document.onmousemove = (event) => {
-        game.update(event.pageX, event.pageY);
+    gameBoardDiv.onmousemove = (event) => {
+        game.mov(event.pageX, event.pageY);
     }
-    document.onmousedown = (event) => {
+    gameBoardDiv.onmousedown = (event) => {
         game.click(event.pageX, event.pageY);
     }
 }
@@ -108,6 +110,7 @@ const gameLoop = () => {
         then = Date.now() - (elapsed % fpsInterval);
         GameVars.deltaTime = elapsed / 1000;
         // updateFps(then);
+        game.update();
         game.draw();
     }
     window.requestAnimationFrame(() => gameLoop());

@@ -71,7 +71,6 @@ export class Board {
                 );
             }
         }
-        console.log("potato");
         return boardTiles;
     }
 
@@ -93,7 +92,7 @@ export class Board {
 
     click(x, y) {
         let targetTile = this.retrieveTargetTile(x, y);
-        if (this.selectedCharacter && targetTile) {
+        if (this.selectedCharacter && !!targetTile) {
             //clean selection
             this.boardTiles.forEach(row => row.forEach(tile => tile.click(0, 0)));
 

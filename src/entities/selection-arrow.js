@@ -8,7 +8,7 @@ export class SelectionArrow {
         this.y = -12;
     }
 
-    draw(tileX, tileY, ctx) {
-        drawSprite(ctx, SelectedArrow, toPixelSize(1), tileX + this.x, tileY + this.y);
+    draw(tileX, tileY, ctx, isPlayer) {
+        drawSprite(ctx, SelectedArrow, toPixelSize(1), tileX + this.x, tileY + this.y, { "sa": (isPlayer ? "#ffff57" : "#ff0000") });
     }
 }

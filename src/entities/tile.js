@@ -100,7 +100,7 @@ export class Tile {
     drawMiddle() {
         if (this.isSelected) this.drawHighlight(!this.character || this.character.isPlayer ? "#52804d" : "#ff0000");
         if (this.isHighlight) this.drawHighlight(!this.character || this.character.isPlayer ? "#ffff57" : "#ff0000");
-        if (this.isSelected) this.directionArrow.draw(this.x, this.y, this.ctx);
+        if (this.isSelected) this.directionArrow.draw(this.x, this.y - this.height, this.ctx);
     }
 
     drawHighlight(color) {
@@ -109,7 +109,7 @@ export class Tile {
     }
 
     drawFront() {
-        this.character?.draw(this.x, this.y, this.ctx);
-        if (this.isSelected && this.character) this.selectionArrow.draw(this.x, this.y, this.ctx);
+        this.character?.draw(this.x, this.y - this.height, this.ctx);
+        if (this.isSelected && this.character) this.selectionArrow.draw(this.x, this.y - this.height, this.ctx, !this.character || this.character.isPlayer);
     }
 }

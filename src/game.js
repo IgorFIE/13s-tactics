@@ -24,7 +24,7 @@ export class Game {
         const charactersObj = [];
         characterPositions.forEach(pos => {
             const characterPos = pos[1];
-            this.board.createCharacter(characterPos.x, characterPos.y, pos[0], isPlayer ? DirectionType.UP : DirectionType.DOWN, isPlayer);
+            this.board.createCharacter(characterPos.x, characterPos.y, pos[0], pos[2], isPlayer);
             charactersObj.push(this.board.boardTiles[characterPos.y][characterPos.x].character);
         });
         return charactersObj;

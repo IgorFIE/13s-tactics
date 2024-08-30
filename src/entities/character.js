@@ -16,7 +16,7 @@ export class Character {
     updatePos(x, y, direction) {
         this.x = x;
         this.y = y;
-        this.direction = direction;
+        this.direction = direction >= 0 ? direction : this.direction;
     }
 
     draw(tileX, tileY, ctx) {

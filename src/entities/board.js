@@ -7,13 +7,16 @@ import { Character } from "./character";
 import { Tile } from "./tile";
 
 export class Board {
-    constructor(gameDiv) {
+    constructor(gameDiv, levelWalls) {
         this.gameDiv = gameDiv;
+        this.levelWalls = levelWalls;
+
         this.createBackground();
         this.createGameBoardShadow();
         this.createGameBoard();
         this.resetBoardPos();
         this.dragElement(this);
+
         this.selectedCharacter = null;
     }
 
@@ -63,11 +66,11 @@ export class Board {
         for (let y = 0; y < GameVars.gameBoardSize; y++) {
             boardTiles.push([]);
             for (let x = 0; x < GameVars.gameBoardSize; x++) {
+                const tileType = this.levelWalls.filter(wallPos => wallPos.y === y && wallPos.x === x).length === 1 ? TileType.WALL : TileType.FLOOR;
                 boardTiles[y].push(new Tile(
                     x, y,
                     startX - (y * GameVars.tileXRatio) + (x * GameVars.tileXRatio),
-                    (x * GameVars.tileYRatio) + (y * GameVars.tileYRatio),
-                    x == 4 && y == 4 ? TileType.WALL : TileType.FLOOR, this.boardCtx)
+                    (x * GameVars.tileYRatio) + (y * GameVars.tileYRatio), tileType, this.boardCtx)
                 );
             }
         }

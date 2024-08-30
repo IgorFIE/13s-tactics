@@ -1,5 +1,5 @@
 import { CharacterStatus } from "./entities/character-status";
-import { Point } from "./entities/Point";
+import { Point } from "./entities/point";
 import { CharacterType } from "./enum/character-type";
 import { DirectionType } from "./enum/direction-type";
 

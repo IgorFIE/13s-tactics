@@ -52,8 +52,8 @@ export class UI {
 
     createCharacterIcons() {
         this.charactersDiv = createElem(this.uiDiv, "div");
-
-        let yStartPos = (GameVars.gameH - toPixelSize(32 * 3) - toPixelSize(4 * 2)) / 2;
+        const countCharacters = Object.keys(this.game.playerCharacters).length;
+        const yStartPos = (GameVars.gameH - toPixelSize(32 * countCharacters) - toPixelSize(4 * (countCharacters - 1))) / 2;
         let index = 0;
         for (let key in this.game.playerCharacters) {
             this.uiCharacters.push(new UiCharacter(toPixelSize(8), yStartPos + (toPixelSize(32) * index) + toPixelSize(4 * index), this.game.playerCharacters[key], this.charactersDiv, this.game));

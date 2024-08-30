@@ -2,7 +2,7 @@ import { TileType } from "../enum/tile-type";
 import { GameVars, toPixelSize } from "../game-variables";
 import { createPixelLine, fillPolygon } from "../utilities/draw-utilities";
 import { DirectionArrow } from "./direction-arrow";
-import { Point } from "./Point";
+import { Point } from "./point";
 import { Polygon } from "./polygon";
 import { SelectionArrow } from "./selection-arrow";
 
@@ -70,7 +70,7 @@ export class Tile {
     }
 
     click(x, y) {
-        this.isSelected = !!this.character && this.collisionObj.isPointInsidePolygon(x, y);
+        this.isSelected = !!this.character && this.character.isPlayer && this.collisionObj.isPointInsidePolygon(x, y);
         return this.isSelected;
     }
 

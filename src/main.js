@@ -35,12 +35,10 @@ const init = () => {
 }
 
 const initHandlers = () => {
-    gameBoardDiv.onmousemove = (event) => {
-        game.mov(event.pageX, event.pageY);
-    }
-    gameBoardDiv.onmousedown = (event) => {
-        game.click(event.pageX, event.pageY);
-    }
+    gameBoardDiv.onmousemove = (event) => { game.mov(event.pageX, event.pageY) };
+    gameBoardDiv.onmousedown = (e) => { game.click(e.clientX, e.clientY) };
+
+    gameBoardDiv.ontouchstart = (e) => { game.click(e.touches[0].clientX, e.touches[0].clientY) };
 }
 
 const gameLoop = () => {

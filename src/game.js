@@ -15,22 +15,18 @@ export class Game {
         this.playerCharacters = this.createCharacters(this.level.playerCharacters, true);
         this.enemyCharacters = this.createCharacters(this.level.enemiesCharacters, false);
         this.ui = new UI(this);
+
+        this.board.selectedCharacter = this.playerCharacters[0];
+        this.board.select();
     }
 
     createCharacters(characterPositions, isPlayer) {
-        const charactersObj = {}
-        let isFirstChar = false;
-        for (let key in characterPositions) {
-            const characterPos = characterPositions[key];
-            const characterType = Number(key);
-            this.board.createCharacter(characterPos.x, characterPos.y, characterType, isPlayer ? DirectionType.UP : DirectionType.DOWN, isPlayer);
-            charactersObj[key] = this.board.boardTiles[characterPos.y][characterPos.x].character;
-            if (isPlayer && !isFirstChar) {
-                this.board.selectedCharacter = this.board.boardTiles[characterPos.y][characterPos.x].character;
-                this.board.select();
-                isFirstChar = true;
-            }
-        };
+        const charactersObj = [];
+        characterPositions.forEach(pos => {
+            const characterPos = pos[1];
+            this.board.createCharacter(characterPos.x, characterPos.y, pos[0], isPlayer ? DirectionType.UP : DirectionType.DOWN, isPlayer);
+            charactersObj.push(this.board.boardTiles[characterPos.y][characterPos.x].character);
+        });
         return charactersObj;
     }
 

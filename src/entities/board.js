@@ -1,4 +1,5 @@
 import { DirectionType } from "../enum/direction-type";
+import { MovType } from "../enum/mov-type";
 import { TileType } from "../enum/tile-type";
 import { GameVars, removePixelSize, toPixelSize } from "../game-variables";
 import { createPixelLine, fillPolygon } from "../utilities/draw-utilities";
@@ -103,7 +104,7 @@ export class Board {
             this.boardTiles[this.selectedCharacter.y][this.selectedCharacter.x].character = null;
 
             // move char
-            this.selectedCharacter.updatePos(targetTile.boardX, targetTile.boardY)
+            this.selectedCharacter.updatePos(targetTile.boardX, targetTile.boardY, targetTile.directionArrow.direction)
 
             // set char on new pos
             this.boardTiles[this.selectedCharacter.y][this.selectedCharacter.x].character = this.selectedCharacter;
@@ -142,24 +143,32 @@ export class Board {
             this.boardTiles[y][x].select();
 
             const dist = GameVars.characterStatus[this.selectedCharacter.characterType].dist;
-
-            let hasObstacleUp, hasObstacleDown, hasObstacleLeft, hasObstacleRight;
-            for (let i = 1; i <= dist; i++) {
-                if (!hasObstacleUp && (y - i < 0 || this.validateCollision(x, y - i))) hasObstacleUp = true;
-                if (!hasObstacleDown && (y + i >= GameVars.gameBoardSize || this.validateCollision(x, y + i))) hasObstacleDown = true;
-                if (!hasObstacleLeft && (x - i < 0 || this.validateCollision(x - i, y))) hasObstacleLeft = true;
-                if (!hasObstacleRight && (x + i >= GameVars.gameBoardSize || this.validateCollision(x + i, y))) hasObstacleRight = true;
-
-                if (!hasObstacleUp) this.boardTiles[y - i][x].select(DirectionType.UP);
-                if (!hasObstacleDown) this.boardTiles[y + i][x].select(DirectionType.DOWN);
-                if (!hasObstacleLeft) this.boardTiles[y][x - i].select(DirectionType.LEFT);
-                if (!hasObstacleRight) this.boardTiles[y][x + i].select(DirectionType.RIGHT);
+            const movType = GameVars.characterStatus[this.selectedCharacter.characterType].movType;
+            if (movType === MovType.DIRECTIONAL || movType === MovType.BOTH) {
+                this.loopDirection(dist, (i) => y - i >= 0 && this.validateCollision(x, y - i, DirectionType.UP));
+                this.loopDirection(dist, (i) => y + i < GameVars.gameBoardSize && this.validateCollision(x, y + i, DirectionType.DOWN));
+                this.loopDirection(dist, (i) => x - i >= 0 && this.validateCollision(x - i, y, DirectionType.LEFT));
+                this.loopDirection(dist, (i) => x + i < GameVars.gameBoardSize && this.validateCollision(x + i, y, DirectionType.RIGHT));
+            }
+            if (movType === MovType.DIAGONAL || movType === MovType.BOTH) {
+                this.loopDirection(dist, (i) => y - i >= 0 && x - i >= 0 && this.validateCollision(x - i, y - i, DirectionType.UP));
+                this.loopDirection(dist, (i) => y + i < GameVars.gameBoardSize && x + i < GameVars.gameBoardSize && this.validateCollision(x + i, y + i, DirectionType.DOWN));
+                this.loopDirection(dist, (i) => x - i >= 0 && y + i < GameVars.gameBoardSize && this.validateCollision(x - i, y + i, DirectionType.LEFT));
+                this.loopDirection(dist, (i) => y - i >= 0 && x + i < GameVars.gameBoardSize && this.validateCollision(x + i, y - i, DirectionType.RIGHT));
             }
         }
     }
 
-    validateCollision(x, y) {
-        return this.boardTiles[y][x].tileType === TileType.WALL || this.boardTiles[y][x].character;
+    loopDirection(dist, fn) {
+        for (let i = 1; i <= dist; i++) {
+            if (fn(i)) break;
+        }
+    }
+
+    validateCollision(x, y, directionType) {
+        if (this.boardTiles[y][x].tileType === TileType.WALL || this.boardTiles[y][x].character?.isPlayer) return true;
+        this.boardTiles[y][x].select(directionType);
+        if (this.boardTiles[y][x].character && !this.boardTiles[y][x].isPlayer) return true;
     }
 
     update(x, y) {

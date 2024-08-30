@@ -2,6 +2,7 @@ import { CharacterStatus } from "./entities/character-status";
 import { Point } from "./entities/point";
 import { CharacterType } from "./enum/character-type";
 import { DirectionType } from "./enum/direction-type";
+import { MovType } from "./enum/mov-type";
 
 const storeId = 'igorfie-pixel-swat';
 
@@ -91,9 +92,9 @@ export const GameVars = {
         }
     },
     characterStatus: {
-        [CharacterType.SHIELD]: new CharacterStatus(0, 3, 1),
-        [CharacterType.RANGE]: new CharacterStatus(2, 1, 2),
-        [CharacterType.MELEE]: new CharacterStatus(4, 2, 3),
+        [CharacterType.SHIELD]: new CharacterStatus(0, 3, 1, MovType.BOTH),
+        [CharacterType.RANGE]: new CharacterStatus(2, 1, 2, MovType.DIAGONAL),
+        [CharacterType.MELEE]: new CharacterStatus(3, 2, 4, MovType.DIRECTIONAL),
     },
 
     moveOptionArrowPos: {

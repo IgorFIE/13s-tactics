@@ -1,6 +1,6 @@
 import { CharacterType } from "../enum/character-type";
 import { DirectionType } from "../enum/direction-type";
-import { GameVars, removePixelSize, toPixelSize } from "../game-variables";
+import { GameVars, toPixelSize } from "../game-variables";
 import { EnemySwatColors, MeleeSwatBottom, MeleeSwatTop, PlayerSwatColors, RangeSwatBottom, RangeSwatTop, ShieldSwatBottom, ShieldSwatTop } from "../sprites/swat-sprites";
 import { drawSprite } from "../utilities/draw-utilities";
 
@@ -13,19 +13,10 @@ export class Character {
         this.isPlayer = isPlayer;
     }
 
-    updatePos(x, y) {
-        this.setCharacterDirection(this.x - x, this.y - y);
+    updatePos(x, y, direction) {
         this.x = x;
         this.y = y;
-    }
-
-    setCharacterDirection(xDiff, yDiff) {
-        if (xDiff != 0) {
-            this.direction = xDiff < 0 ? DirectionType.RIGHT : DirectionType.LEFT;
-        }
-        if (yDiff != 0) {
-            this.direction = yDiff < 0 ? DirectionType.DOWN : DirectionType.UP;
-        }
+        this.direction = direction;
     }
 
     draw(tileX, tileY, ctx) {

@@ -98,8 +98,8 @@ export class Tile {
     }
 
     drawMiddle() {
-        if (this.isSelected) this.drawHighlight("#52804d");
-        if (this.isHighlight) this.drawHighlight("#ffff57");
+        if (this.isSelected) this.drawHighlight(!this.character || this.character.isPlayer ? "#52804d" : "#ff0000");
+        if (this.isHighlight) this.drawHighlight(!this.character || this.character.isPlayer ? "#ffff57" : "#ff0000");
         if (this.isSelected) this.directionArrow.draw(this.x, this.y, this.ctx);
     }
 

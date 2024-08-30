@@ -52,13 +52,11 @@ export class UI {
 
     createCharacterIcons() {
         this.charactersDiv = createElem(this.uiDiv, "div");
-        const countCharacters = Object.keys(this.game.playerCharacters).length;
+        const countCharacters = this.game.playerCharacters.length;
         const yStartPos = (GameVars.gameH - toPixelSize(32 * countCharacters) - toPixelSize(4 * (countCharacters - 1))) / 2;
-        let index = 0;
-        for (let key in this.game.playerCharacters) {
-            this.uiCharacters.push(new UiCharacter(toPixelSize(8), yStartPos + (toPixelSize(32) * index) + toPixelSize(4 * index), this.game.playerCharacters[key], this.charactersDiv, this.game));
-            index++;
-        }
+        this.game.playerCharacters.forEach((value, index) => this.uiCharacters.push(
+            new UiCharacter(toPixelSize(8), yStartPos + (toPixelSize(32) * index) + toPixelSize(4 * index), value, this.charactersDiv, this.game)
+        ));
     }
 
     update(character) {

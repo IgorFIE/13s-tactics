@@ -1,5 +1,5 @@
 import { TileType } from "../enum/tile-type";
-import { GameVars, toPixelSize } from "../game-variables";
+import { GameVars, toBoardPixelSize } from "../game-variables";
 import { createPixelLine, fillPolygon } from "../utilities/draw-utilities";
 import { DirectionArrow } from "./direction-arrow";
 import { Point } from "./point";
@@ -38,35 +38,35 @@ export class Tile {
 
     createCollisionBox() {
         this.collisionObj = new Polygon([
-            new Point(toPixelSize(this.x), toPixelSize(this.y + this.yRatio - this.height)),
-            new Point(toPixelSize(this.x + this.xRatio), toPixelSize(this.y - this.height)),
-            new Point(toPixelSize(this.x + (this.xRatio * 2)), toPixelSize(this.y + this.yRatio - this.height)),
-            new Point(toPixelSize(this.x + this.xRatio), toPixelSize(this.y + (this.yRatio * 2) - this.height))
+            new Point(toBoardPixelSize(this.x), toBoardPixelSize(this.y + this.yRatio - this.height)),
+            new Point(toBoardPixelSize(this.x + this.xRatio), toBoardPixelSize(this.y - this.height)),
+            new Point(toBoardPixelSize(this.x + (this.xRatio * 2)), toBoardPixelSize(this.y + this.yRatio - this.height)),
+            new Point(toBoardPixelSize(this.x + this.xRatio), toBoardPixelSize(this.y + (this.yRatio * 2) - this.height))
         ]);
     }
 
     createTopLines() {
         this.topLines = [];
-        createPixelLine(this.x, this.y + this.yRatio - this.height, this.x + this.xRatio, this.y - this.height, this.tileType == TileType.WALL ? "#38252e" : "#edeef7", toPixelSize(1), this.topLines);
-        createPixelLine(this.x + this.xRatio, this.y - this.height, this.x + (this.xRatio * 2), this.y + this.yRatio - this.height, this.tileType == TileType.WALL ? "#38252e" : "#edeef7", toPixelSize(1), this.topLines);
-        createPixelLine(this.x, this.y + this.yRatio - this.height, this.x + this.xRatio, this.y + (this.yRatio * 2) - this.height, this.tileType == TileType.WALL ? "#38252e" : "#edeef7", toPixelSize(1), this.topLines);
-        createPixelLine(this.x + this.xRatio, this.y + (this.yRatio * 2) - this.height, this.x + (this.xRatio * 2), this.y + this.yRatio - this.height, this.tileType == TileType.WALL ? "#38252e" : "#edeef7", toPixelSize(1), this.topLines);
+        createPixelLine(this.x, this.y + this.yRatio - this.height, this.x + this.xRatio, this.y - this.height, this.tileType == TileType.WALL ? "#38252e" : "#edeef7", toBoardPixelSize(1), this.topLines);
+        createPixelLine(this.x + this.xRatio, this.y - this.height, this.x + (this.xRatio * 2), this.y + this.yRatio - this.height, this.tileType == TileType.WALL ? "#38252e" : "#edeef7", toBoardPixelSize(1), this.topLines);
+        createPixelLine(this.x, this.y + this.yRatio - this.height, this.x + this.xRatio, this.y + (this.yRatio * 2) - this.height, this.tileType == TileType.WALL ? "#38252e" : "#edeef7", toBoardPixelSize(1), this.topLines);
+        createPixelLine(this.x + this.xRatio, this.y + (this.yRatio * 2) - this.height, this.x + (this.xRatio * 2), this.y + this.yRatio - this.height, this.tileType == TileType.WALL ? "#38252e" : "#edeef7", toBoardPixelSize(1), this.topLines);
     }
 
     createRightLines() {
         this.rightLines = [];
-        createPixelLine(this.x + this.xRatio, this.y + (this.yRatio * 2) - this.height, this.x + (this.xRatio * 2), this.y + this.yRatio - this.height, this.tileType == TileType.WALL ? "#100f0f" : "#1b1116", toPixelSize(1), this.rightLines);
-        createPixelLine(this.x + this.xRatio, this.y + (this.yRatio * 2) + this.depth, this.x + (this.xRatio * 2), this.y + this.yRatio + this.depth, this.tileType == TileType.WALL ? "#100f0f" : "#1b1116", toPixelSize(1), this.rightLines);
-        createPixelLine(this.x + this.xRatio, this.y + (this.yRatio * 2) - this.height, this.x + this.xRatio, this.y + (this.yRatio * 2) + this.depth, this.tileType == TileType.WALL ? "#100f0f" : "#1b1116", toPixelSize(1), this.rightLines);
-        createPixelLine(this.x + (this.xRatio * 2), this.y + this.yRatio - this.height, this.x + (this.xRatio * 2), this.y + this.yRatio + this.depth, this.tileType == TileType.WALL ? "#100f0f" : "#1b1116", toPixelSize(1), this.rightLines);
+        createPixelLine(this.x + this.xRatio, this.y + (this.yRatio * 2) - this.height, this.x + (this.xRatio * 2), this.y + this.yRatio - this.height, this.tileType == TileType.WALL ? "#100f0f" : "#1b1116", toBoardPixelSize(1), this.rightLines);
+        createPixelLine(this.x + this.xRatio, this.y + (this.yRatio * 2) + this.depth, this.x + (this.xRatio * 2), this.y + this.yRatio + this.depth, this.tileType == TileType.WALL ? "#100f0f" : "#1b1116", toBoardPixelSize(1), this.rightLines);
+        createPixelLine(this.x + this.xRatio, this.y + (this.yRatio * 2) - this.height, this.x + this.xRatio, this.y + (this.yRatio * 2) + this.depth, this.tileType == TileType.WALL ? "#100f0f" : "#1b1116", toBoardPixelSize(1), this.rightLines);
+        createPixelLine(this.x + (this.xRatio * 2), this.y + this.yRatio - this.height, this.x + (this.xRatio * 2), this.y + this.yRatio + this.depth, this.tileType == TileType.WALL ? "#100f0f" : "#1b1116", toBoardPixelSize(1), this.rightLines);
     }
 
     createLeftLines() {
         this.leftLines = [];
-        createPixelLine(this.x, this.y + this.yRatio - this.height, this.x + this.xRatio, this.y + (this.yRatio * 2) - this.height, this.tileType == TileType.WALL ? "#38252e" : "#3e3846", toPixelSize(1), this.leftLines);
-        createPixelLine(this.x + this.xRatio, this.y + (this.yRatio * 2) - this.height, this.x + this.xRatio, this.y + (this.yRatio * 2) + this.depth, this.tileType == TileType.WALL ? "#38252e" : "#3e3846", toPixelSize(1), this.leftLines);
-        createPixelLine(this.x, this.y + this.yRatio - this.height, this.x, this.y + this.yRatio + this.depth, this.tileType == TileType.WALL ? "#38252e" : "#3e3846", toPixelSize(1), this.leftLines);
-        createPixelLine(this.x, this.y + this.yRatio + this.depth, this.x + this.xRatio, this.y + (this.yRatio * 2) + this.depth, this.tileType == TileType.WALL ? "#38252e" : "#3e3846", toPixelSize(1), this.leftLines);
+        createPixelLine(this.x, this.y + this.yRatio - this.height, this.x + this.xRatio, this.y + (this.yRatio * 2) - this.height, this.tileType == TileType.WALL ? "#38252e" : "#3e3846", toBoardPixelSize(1), this.leftLines);
+        createPixelLine(this.x + this.xRatio, this.y + (this.yRatio * 2) - this.height, this.x + this.xRatio, this.y + (this.yRatio * 2) + this.depth, this.tileType == TileType.WALL ? "#38252e" : "#3e3846", toBoardPixelSize(1), this.leftLines);
+        createPixelLine(this.x, this.y + this.yRatio - this.height, this.x, this.y + this.yRatio + this.depth, this.tileType == TileType.WALL ? "#38252e" : "#3e3846", toBoardPixelSize(1), this.leftLines);
+        createPixelLine(this.x, this.y + this.yRatio + this.depth, this.x + this.xRatio, this.y + (this.yRatio * 2) + this.depth, this.tileType == TileType.WALL ? "#38252e" : "#3e3846", toBoardPixelSize(1), this.leftLines);
     }
 
     click(x, y) {
@@ -81,6 +81,13 @@ export class Tile {
     select(direction) {
         this.isSelected = true;
         this.directionArrow.direction = direction;
+    }
+
+    updateZoom() {
+        this.createTopLines();
+        this.createLeftLines();
+        this.createRightLines();
+        this.createCollisionBox();
     }
 
     update(x, y) {

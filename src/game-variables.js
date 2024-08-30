@@ -19,6 +19,7 @@ let gameH;
 let deltaTime;
 
 let pixelSize;
+let boardPixelSize;
 
 let gameWdAsPixels;
 let gameHgAsPixels;
@@ -31,6 +32,7 @@ const updatePixelSize = (width, height) => {
     GameVars.gameH = height;
 
     GameVars.pixelSize = pixelCal(2, 4);
+    GameVars.boardPixelSize = GameVars.pixelSize;
 
     GameVars.gameWdAsPixels = width / GameVars.pixelSize;
     GameVars.gameHgAsPixels = height / GameVars.pixelSize;
@@ -59,6 +61,7 @@ export const GameVars = {
     deltaTime,
 
     pixelSize,
+    boardPixelSize,
     gameWdAsPixels,
     gameHgAsPixels,
 
@@ -113,4 +116,12 @@ export const toPixelSize = (value) => {
 
 export const removePixelSize = (value) => {
     return value / GameVars.pixelSize;
+}
+
+export const toBoardPixelSize = (value) => {
+    return value * GameVars.boardPixelSize;
+}
+
+export const removeBoardPixelSize = (value) => {
+    return value / GameVars.boardPixelSize;
 }

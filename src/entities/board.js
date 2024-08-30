@@ -2,7 +2,7 @@ import { CharacterType } from "../enum/character-type";
 import { DirectionType } from "../enum/direction-type";
 import { MovType } from "../enum/mov-type";
 import { TileType } from "../enum/tile-type";
-import { GameVars, removePixelSize, toPixelSize } from "../game-variables";
+import { GameVars, removeBoardPixelSize, toBoardPixelSize, toPixelSize } from "../game-variables";
 import { createPixelLine, fillPolygon } from "../utilities/draw-utilities";
 import { createElem, setElemSize } from "../utilities/elem-utilities";
 import { Character } from "./character";
@@ -12,10 +12,23 @@ export class Board {
     constructor(gameDiv, levelWalls) {
         this.gameDiv = gameDiv;
         this.levelWalls = levelWalls;
+        this.x = 0;
+        this.y = 0;
+
+        this.lastPixelSize = toBoardPixelSize(1);
 
         this.createBackground();
-        this.createGameBoardShadow();
-        this.createGameBoard();
+
+        this.boardShadowCanvas = createElem(this.gameDiv, "canvas", "board-shadow");
+        this.boardShadowCtx = this.boardShadowCanvas.getContext("2d");
+        this.drawGameBoardShadow();
+
+        this.boardCanvas = createElem(this.gameDiv, "canvas", "board", [], null, null, GameVars.isMobile);
+        this.boardCtx = this.boardCanvas.getContext("2d");
+        this.setGameBoardCanvas();
+
+        this.boardTiles = this.createGameBoardTiles();
+
         this.resetBoardPos();
         this.dragElement(this);
 
@@ -24,45 +37,42 @@ export class Board {
 
     createBackground() {
         this.backgroundCanvas = createElem(this.gameDiv, "canvas", "board-background", null,
-            toPixelSize(GameVars.gameWdAsPixels), toPixelSize(GameVars.gameHgAsPixels), GameVars.isMobile, "#100f0f");
+            toBoardPixelSize(GameVars.gameWdAsPixels), toBoardPixelSize(GameVars.gameHgAsPixels), GameVars.isMobile, "#100f0f");
         const lines = [];
         for (let i = 0; i < GameVars.gameHgAsPixels / 12; i++) {
-            createPixelLine(0, 12 * i, GameVars.gameWdAsPixels, 12 * i, "#1b1116", toPixelSize(1), lines);
-            createPixelLine(0, 12 * i + 2, GameVars.gameWdAsPixels, 12 * i + 2, "#1b1116", toPixelSize(1), lines);
+            createPixelLine(0, 12 * i, GameVars.gameWdAsPixels, 12 * i, "#1b1116", toBoardPixelSize(1), lines);
+            createPixelLine(0, 12 * i + 2, GameVars.gameWdAsPixels, 12 * i + 2, "#1b1116", toBoardPixelSize(1), lines);
         }
         const ctx = this.backgroundCanvas.getContext("2d");
         lines.forEach(line => line.draw(ctx));
     }
 
-    createGameBoardShadow() {
-        const width = toPixelSize(GameVars.tileXRatio * GameVars.gameBoardSize * 2 + 1);
-        const height = toPixelSize(GameVars.tileYRatio * GameVars.gameBoardSize * 2 + 1 + GameVars.tileDepth);
+    drawGameBoardShadow() {
+        this.boardShadowCtx.clearRect(0, 0, this.boardShadowCanvas.width, this.boardShadowCanvas.height);
 
-        this.boardShadowCanvas = createElem(this.gameDiv, "canvas", "board-shadow");
+        const width = toBoardPixelSize(GameVars.tileXRatio * GameVars.gameBoardSize * 2 + 1);
+        const height = toBoardPixelSize(GameVars.tileYRatio * GameVars.gameBoardSize * 2 + 1 + GameVars.tileDepth);
         setElemSize(this.boardShadowCanvas, width, height);
 
         const lines = [];
-        createPixelLine(removePixelSize(width / 2), 0, removePixelSize(width) - 1, removePixelSize(height / 2), "#00000070", toPixelSize(1), lines);
-        createPixelLine(removePixelSize(width) - 1, removePixelSize(height / 2), removePixelSize(width / 2), removePixelSize(height) - 1, "#00000070", toPixelSize(1), lines);
-        createPixelLine(removePixelSize(width / 2), removePixelSize(height) - 1, 0, removePixelSize(height / 2), "#00000070", toPixelSize(1), lines);
-        createPixelLine(0, removePixelSize(height / 2), removePixelSize(width / 2), 0, "#00000070", toPixelSize(1), lines);
+        createPixelLine(removeBoardPixelSize(width / 2), 0, removeBoardPixelSize(width) - 1, removeBoardPixelSize(height / 2), "#00000070", toBoardPixelSize(1), lines);
+        createPixelLine(removeBoardPixelSize(width) - 1, removeBoardPixelSize(height / 2), removeBoardPixelSize(width / 2), removeBoardPixelSize(height) - 1, "#00000070", toBoardPixelSize(1), lines);
+        createPixelLine(removeBoardPixelSize(width / 2), removeBoardPixelSize(height) - 1, 0, removeBoardPixelSize(height / 2), "#00000070", toBoardPixelSize(1), lines);
+        createPixelLine(0, removeBoardPixelSize(height / 2), removeBoardPixelSize(width / 2), 0, "#00000070", toBoardPixelSize(1), lines);
 
-        const ctx = this.boardShadowCanvas.getContext("2d");
-        lines.forEach(line => line.draw(ctx));
-        fillPolygon(lines, "#00000070", ctx);
+        lines.forEach(line => line.draw(this.boardShadowCtx));
+        fillPolygon(lines, "#00000070", this.boardShadowCtx);
     }
 
-    createGameBoard() {
-        this.boardCanvas = createElem(this.gameDiv, "canvas", "board", [], null, null, GameVars.isMobile);
-        this.boardCtx = this.boardCanvas.getContext("2d");
+    setGameBoardCanvas() {
+        this.boardCtx.clearRect(0, 0, this.boardCanvas.width, this.boardCanvas.height);
         setElemSize(this.boardCanvas,
-            toPixelSize(GameVars.tileXRatio * GameVars.gameBoardSize * 2 + 1),
-            toPixelSize(GameVars.tileYRatio * GameVars.gameBoardSize * 2 + 1 + GameVars.tileDepth)
+            toBoardPixelSize(GameVars.tileXRatio * GameVars.gameBoardSize * 2 + 1),
+            toBoardPixelSize(GameVars.tileYRatio * GameVars.gameBoardSize * 2 + 1 + GameVars.tileDepth)
         );
-        this.boardTiles = this.generateGameBoard();
     }
 
-    generateGameBoard() {
+    createGameBoardTiles() {
         const startX = (GameVars.tileXRatio * GameVars.gameBoardSize) - GameVars.tileXRatio;
         const boardTiles = [];
         for (let y = 0; y < GameVars.gameBoardSize; y++) {
@@ -88,7 +98,7 @@ export class Board {
         this.x = x;
         this.y = y;
         this.boardCanvas.style.translate = x + 'px ' + y + 'px';
-        this.boardShadowCanvas.style.translate = x + 'px ' + (y + toPixelSize(GameVars.tileYRatio + GameVars.tileDepth)) + 'px';
+        this.boardShadowCanvas.style.translate = x + 'px ' + (y + toBoardPixelSize(GameVars.tileYRatio + GameVars.tileDepth)) + 'px';
     }
 
     createCharacter(x, y, characterType, directionType, isPlayer) {
@@ -187,6 +197,22 @@ export class Board {
 
     update(x, y) {
         this.boardTiles.forEach(row => row.forEach(tile => tile.update(x, y)))
+    }
+
+    updateZoom() {
+        const xDiff = this.x - (GameVars.gameW - this.boardCanvas.width) / 2;
+        const yDiff = this.y - (GameVars.gameH - this.boardCanvas.height) / 2;
+        this.updateBoardPos(0, 0);
+        this.drawGameBoardShadow();
+        this.setGameBoardCanvas();
+        this.boardTiles.forEach(tileRow => tileRow.forEach(tile => tile.updateZoom()));
+        this.resetBoardPos();
+        this.updateBoardPos(this.x + this.retrieveNewDiff(xDiff), this.y + this.retrieveNewDiff(yDiff));
+        this.lastPixelSize = toBoardPixelSize(1);
+    }
+
+    retrieveNewDiff(value) {
+        return value * toBoardPixelSize(1) / this.lastPixelSize;
     }
 
     draw() {

@@ -1,6 +1,6 @@
 import { CharacterType } from "../enum/character-type";
 import { DirectionType } from "../enum/direction-type";
-import { GameVars, toPixelSize } from "../game-variables";
+import { GameVars, toBoardPixelSize } from "../game-variables";
 import { EnemySwatColors, MeleeSwatBottom, MeleeSwatTop, PlayerSwatColors, RangeSwatBottom, RangeSwatTop, ShieldSwatBottom, ShieldSwatTop } from "../sprites/swat-sprites";
 import { drawSprite } from "../utilities/draw-utilities";
 
@@ -24,11 +24,11 @@ export class Character {
         switch (this.direction) {
             case DirectionType.UP:
             case DirectionType.LEFT:
-                drawSprite(ctx, this.getCharacterTypeSprite(), toPixelSize(1), tileX + spritePos.x, tileY + spritePos.y, this.getCharacterColors(), this.direction == DirectionType.LEFT);
+                drawSprite(ctx, this.getCharacterTypeSprite(), toBoardPixelSize(1), tileX + spritePos.x, tileY + spritePos.y, this.getCharacterColors(), this.direction == DirectionType.LEFT);
                 break;
             case DirectionType.DOWN:
             case DirectionType.RIGHT:
-                drawSprite(ctx, this.getCharacterTypeSprite(), toPixelSize(1), tileX + spritePos.x, tileY + spritePos.y, this.getCharacterColors(), this.direction == DirectionType.DOWN);
+                drawSprite(ctx, this.getCharacterTypeSprite(), toBoardPixelSize(1), tileX + spritePos.x, tileY + spritePos.y, this.getCharacterColors(), this.direction == DirectionType.DOWN);
                 break;
         }
     }

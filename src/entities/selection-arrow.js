@@ -1,4 +1,4 @@
-import { toPixelSize } from "../game-variables";
+import { toBoardPixelSize } from "../game-variables";
 import { SelectedArrow } from "../sprites/interaction-arrows";
 import { drawSprite } from "../utilities/draw-utilities";
 
@@ -9,6 +9,6 @@ export class SelectionArrow {
     }
 
     draw(tileX, tileY, ctx, isPlayer) {
-        drawSprite(ctx, SelectedArrow, toPixelSize(1), tileX + this.x, tileY + this.y, { "sa": (isPlayer ? "#ffff57" : "#ff0000") });
+        drawSprite(ctx, SelectedArrow, toBoardPixelSize(1), tileX + this.x, tileY + this.y, { "sa": (isPlayer ? "#ffff57" : "#ff0000") });
     }
 }

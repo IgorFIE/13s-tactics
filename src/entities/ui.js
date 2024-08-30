@@ -39,12 +39,19 @@ export class UI {
         genSmallBox(this.zoom, 0, 0, 25, 60, toPixelSize(1), "#3e3846", "#1b1116");
         drawPixelTextInCanvas("ZOOM", this.zoom, toPixelSize(1), 13, 8, "#00bcd4", 1);
 
-        this.zoomPlus = createElem(this.zoomDiv, "canvas", null, null, toPixelSize(18), toPixelSize(18), GameVars.isMobile, null, () => console.log("pixel up"));
+        this.zoomPlus = createElem(this.zoomDiv, "canvas", null, null, toPixelSize(18), toPixelSize(18), GameVars.isMobile, null, () => {
+            GameVars.boardPixelSize++;
+            this.game.updateZoom();
+        });
         this.zoomPlus.style.translate = (GameVars.gameW - this.zoom.width - toPixelSize(4)) + 'px ' + (((GameVars.gameH - this.zoom.height) / 2) + toPixelSize(15)) + 'px';
         genSmallBox(this.zoomPlus, 0, 0, 17, 17, toPixelSize(1), "#3e3846", "#1b1116");
         drawPixelTextInCanvas("+", this.zoomPlus, toPixelSize(1), 9, 9, "#9bf2fa", 4);
 
-        this.zoomMinus = createElem(this.zoomDiv, "canvas", null, null, toPixelSize(18), toPixelSize(18), GameVars.isMobile, null, () => console.log("pixel down"));
+        this.zoomMinus = createElem(this.zoomDiv, "canvas", null, null, toPixelSize(18), toPixelSize(18), GameVars.isMobile, null, () => {
+            GameVars.boardPixelSize--;
+            GameVars.boardPixelSize = GameVars.boardPixelSize < 1 ? 1 : GameVars.boardPixelSize;
+            this.game.updateZoom();
+        });
         this.zoomMinus.style.translate = (GameVars.gameW - this.zoom.width - toPixelSize(4)) + 'px ' + (((GameVars.gameH - this.zoom.height) / 2) + toPixelSize(37)) + 'px';
         genSmallBox(this.zoomMinus, 0, 0, 17, 17, toPixelSize(1), "#3e3846", "#1b1116");
         drawPixelTextInCanvas("-", this.zoomMinus, toPixelSize(1), 9, 9, "#9bf2fa", 4);

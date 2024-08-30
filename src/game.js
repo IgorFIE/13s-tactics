@@ -42,6 +42,10 @@ export class Game {
         this.ui.update(this.board.selectedCharacter);
     }
 
+    updateZoom() {
+        this.board.updateZoom();
+    }
+
     draw() {
         this.board.draw();
         this.ui.draw();

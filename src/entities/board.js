@@ -108,20 +108,7 @@ export class Board {
     click(x, y) {
         let targetTile = this.retrieveTargetTile(x, y);
         if (this.selectedCharacter && !!targetTile) {
-            //clean selection
-            this.boardTiles.forEach(row => row.forEach(tile => tile.click(0, 0)));
-
-            // clean character in it's current pos
-            this.boardTiles[this.selectedCharacter.y][this.selectedCharacter.x].character = null;
-
-            // move char
-            this.selectedCharacter.updatePos(targetTile.boardX, targetTile.boardY, targetTile.directionArrow.direction)
-
-            // set char on new pos
-            this.boardTiles[this.selectedCharacter.y][this.selectedCharacter.x].character = this.selectedCharacter;
-
-            // new select
-            this.select();
+            this.moveCharacter(targetTile);
         } else {
             this.selectedCharacter = null;
             this.boardTiles.forEach(row => row.forEach(tile => {
@@ -145,6 +132,23 @@ export class Board {
             if (targetTile) return;
         });
         return targetTile;
+    }
+
+    moveCharacter(targetTile) {
+        //clean selection
+        this.boardTiles.forEach(row => row.forEach(tile => tile.click(0, 0)));
+
+        // clean character in it's current pos
+        this.boardTiles[this.selectedCharacter.y][this.selectedCharacter.x].character = null;
+
+        // move char
+        this.selectedCharacter.updatePos(targetTile.boardX, targetTile.boardY, targetTile.directionArrow.direction)
+
+        // set char on new pos
+        this.boardTiles[this.selectedCharacter.y][this.selectedCharacter.x].character = this.selectedCharacter;
+
+        // new select
+        this.select();
     }
 
     select() {

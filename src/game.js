@@ -2,6 +2,7 @@ import { Board } from "./entities/board";
 import { UI } from "./entities/ui";
 import { DirectionType } from "./enum/direction-type";
 import { Levels } from "./levels";
+import { aStar } from "./utilities/astar";
 
 export class Game {
     constructor(gameDiv) {
@@ -18,6 +19,22 @@ export class Game {
 
         this.board.selectedCharacter = this.playerCharacters[0];
         this.board.select();
+
+        const aStarAlgorithm = new aStar();
+        this.path = aStarAlgorithm.aStarPath(this.playerCharacters[0], this.enemyCharacters[0], this.board.boardTiles);
+        this.pathIndex = 1; // ignore first position since it's the origin
+        this.movementAi();
+    }
+
+    movementAi() {
+        setTimeout(() => {
+            if (this.pathIndex < this.path.length) {
+                this.board.select();
+                this.board.moveCharacter(this.board.boardTiles[this.path[this.pathIndex].y][this.path[this.pathIndex].x]);
+                this.pathIndex++;
+                this.movementAi();
+            }
+        }, 500);
     }
 
     createCharacters(characterPositions, isPlayer) {

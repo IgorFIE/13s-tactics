@@ -75,12 +75,12 @@ export class aStar {
 
     normalCharacterValidation(s, tile) {
         return (tile.tileType == TileType.FLOOR && !tile.character) ||
-            (tile.tileType == TileType.FLOOR && tile.character && !tile.character.isPlayer && !this.validateShieldCollision(s.x, s.y, tile.character));
+            (tile.tileType == TileType.FLOOR && tile.character && tile.character.isPlayer && !this.validateShieldCollision(s.x, s.y, tile.character));
     }
 
     // melee ignores walls
     meleeCharacterValidation(s, tile) {
-        return !(tile.character && !tile.character.isPlayer && this.validateShieldCollision(s.x, s.y, tile.character));
+        return !(tile.character && tile.character.isPlayer && this.validateShieldCollision(s.x, s.y, tile.character));
     }
 
     validateShieldCollision(x, y, enemy) {

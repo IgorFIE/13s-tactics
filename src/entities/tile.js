@@ -104,10 +104,10 @@ export class Tile {
         this.topLines.forEach(pixel => pixel.draw(this.ctx));
     }
 
-    drawMiddle() {
-        if (this.isSelected) this.drawHighlight(!this.character || this.character.isPlayer ? "#52804d" : "#ff0000");
-        if (this.isHighlight) this.drawHighlight(!this.character || this.character.isPlayer ? "#ffff57" : "#ff0000");
-        if (this.isSelected) this.directionArrow.draw(this.x, this.y - this.height, this.ctx);
+    drawMiddle(isEnemyTurn) {
+        if (this.isSelected) this.drawHighlight(!isEnemyTurn && (!this.character || this.character.isPlayer) ? "#52804d" : "#ff0000");
+        if (this.isHighlight) this.drawHighlight(!isEnemyTurn && (!this.character || this.character.isPlayer) ? "#ffff57" : "#ff0000");
+        if (this.isSelected && !this.character) this.directionArrow.draw(this.x, this.y - this.height, this.ctx, isEnemyTurn ? "#ff0000" : "#52804d");
     }
 
     drawHighlight(color) {

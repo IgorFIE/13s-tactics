@@ -11,9 +11,11 @@ export class UiCharacter {
         this.character = character;
         this.isCharacterSelected = false;
         this.canvas = createElem(div, "canvas", null, null, toPixelSize(30), toPixelSize(32), GameVars.isMobile, null, () => {
-            game.board.click(0, 0);
-            game.board.selectedCharacter = character;
-            game.board.select();
+            if (!game.isEnemyTurn) {
+                game.board.click(0, 0);
+                game.board.selectedCharacter = character;
+                game.board.select();
+            }
         });
         this.canvas.style.translate = x + 'px ' + y + 'px';
 
@@ -22,9 +24,7 @@ export class UiCharacter {
 
     // todo implement update
     update(character) {
-        this.isCharacterSelected = !!character &&
-            character.x === this.character.x && character.y === this.character.y &&
-            character.characterType === this.character.characterType;
+        this.isCharacterSelected = !!character && this.character === character;
     }
 
     draw() {

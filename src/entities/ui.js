@@ -10,6 +10,8 @@ export class UI {
         this.uiDiv = createElem(document.getElementById("game"), "div", "ui");
         this.uiCharacters = [];
 
+        this.currentTime = 13;
+
         this.createTimer();
         this.createZoomBtns();
         this.createResetBtn();
@@ -27,9 +29,15 @@ export class UI {
     createTimer() {
         this.timer = createElem(this.uiDiv, "canvas", null, null, toPixelSize(52), toPixelSize(34));
         this.timer.style.translate = ((GameVars.gameW - this.timer.width) / 2) + 'px ' + (toPixelSize(8)) + 'px';
+        this.timerCtx = this.timer.getContext("2d");
+        this.drawTimer();
+    }
+
+    drawTimer() {
+        this.timerCtx.clearRect(0, 0, this.timer.width, this.timer.height);
         genSmallBox(this.timer, 0, 0, 51, 33, toPixelSize(1), "#3e3846", "#1b1116");
         drawPixelTextInCanvas("TIME", this.timer, toPixelSize(1), 26, 8, "#00bcd4", 1);
-        drawPixelTextInCanvas("13", this.timer, toPixelSize(1), 26, 21, "#9bf2fa", 3);
+        drawPixelTextInCanvas(this.currentTime, this.timer, toPixelSize(1), 26, 21, "#9bf2fa", 3);
     }
 
     createZoomBtns() {
@@ -58,6 +66,7 @@ export class UI {
     }
 
     createCharacterIcons() {
+        if (this.charactersDiv) this.charactersDiv.innerHTML = "";
         this.charactersDiv = createElem(this.uiDiv, "div");
         const countCharacters = this.game.playerCharacters.length;
         const yStartPos = (GameVars.gameH - toPixelSize(32 * countCharacters) - toPixelSize(4 * (countCharacters - 1))) / 2;
@@ -72,5 +81,6 @@ export class UI {
 
     draw() {
         this.uiCharacters.forEach(uiChar => uiChar.draw());
+        this.drawTimer();
     }
 }

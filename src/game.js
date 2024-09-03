@@ -20,21 +20,9 @@ export class Game {
         this.board.selectedCharacter = this.playerCharacters[0];
         this.board.select();
 
-        const aStarAlgorithm = new aStar();
-        this.path = aStarAlgorithm.aStarPath(this.playerCharacters[0], this.enemyCharacters[0], this.board.boardTiles);
-        this.pathIndex = 1; // ignore first position since it's the origin
-        this.movementAi();
-    }
-
-    movementAi() {
-        setTimeout(() => {
-            if (this.pathIndex < this.path.length) {
-                this.board.select();
-                this.board.moveCharacter(this.board.boardTiles[this.path[this.pathIndex].y][this.path[this.pathIndex].x]);
-                this.pathIndex++;
-                this.movementAi();
-            }
-        }, 500);
+        this.aStarAlgorithm = new aStar();
+        this.isEnemyTurn = false;
+        this.resetEnemyMovement = true;
     }
 
     createCharacters(characterPositions, isPlayer) {
@@ -49,6 +37,7 @@ export class Game {
 
     click(x, y) {
         this.board.click(x, y);
+        this.cleanCharacters();
     }
 
     mov(x, y) {
@@ -57,6 +46,56 @@ export class Game {
 
     update() {
         this.ui.update(this.board.selectedCharacter);
+        if (this.isEnemyTurn) this.enemyTurn();
+    }
+
+    enemyTurn() {
+        if (this.resetEnemyMovement) this.fetchNewEnemyMovement();
+    }
+
+    fetchNewEnemyMovement() {
+        let bestCharIndex = -1;
+        let bestPath = 999;
+        const possiblePaths = this.enemyCharacters.map((enemyChar, charIndex) => {
+            return this.playerCharacters.map((playerChar, index) => {
+                const result = this.aStarAlgorithm.aStarPath(enemyChar, playerChar, this.board.boardTiles);
+                if (result.length > 1 && result.length < bestPath) {
+                    bestCharIndex = charIndex;
+                    bestPath = index;
+                }
+                return result;
+            });
+        });
+        if (bestCharIndex != -1) {
+            this.click(0, 0);
+            this.board.selectedCharacter = this.enemyCharacters[bestCharIndex];
+            this.board.select(true);
+
+            this.path = possiblePaths[bestCharIndex][bestPath];
+            this.pathIndex = 1; // ignore first position since it's the origin
+            this.resetEnemyMovement = false;
+            this.movementAi();
+        }
+    }
+
+    movementAi() {
+        setTimeout(() => {
+            if (this.pathIndex < this.path.length) {
+                this.board.moveCharacter(this.board.boardTiles[this.path[this.pathIndex].y][this.path[this.pathIndex].x], true);
+                this.cleanCharacters();
+                this.pathIndex++;
+                this.movementAi();
+            } else {
+                this.resetEnemyMovement = true;
+            }
+        }, 750);
+    }
+
+    cleanCharacters() {
+        const countBeforeFilter = this.playerCharacters.length;
+        this.playerCharacters = this.playerCharacters.filter(char => this.board.boardTiles[char.y][char.x].character === char);
+        if (countBeforeFilter != this.playerCharacters.length) this.ui.createCharacterIcons();
+        this.enemyCharacters = this.enemyCharacters.filter(char => this.board.boardTiles[char.y][char.x].character === char);
     }
 
     updateZoom() {
@@ -64,7 +103,15 @@ export class Game {
     }
 
     draw() {
-        this.board.draw();
+        this.board.draw(this.isEnemyTurn);
         this.ui.draw();
+    }
+
+    isGameOver() {
+        return this.playerCharacters.length === 0;
+    }
+
+    isPlayerWin() {
+        return this.enemyCharacters.length === 0;
     }
 }

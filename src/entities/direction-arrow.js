@@ -12,10 +12,10 @@ export class DirectionArrow {
         this.direction = direction;
     }
 
-    draw(tileX, tileY, ctx) {
+    draw(tileX, tileY, ctx, color) {
         if (this.direction != null) {
             let spritePos = GameVars.moveOptionArrowPos[this.direction];
-            drawSprite(ctx, MoveOptionArrow, toBoardPixelSize(1), tileX + spritePos.x, tileY + spritePos.y, null,
+            drawSprite(ctx, MoveOptionArrow, toBoardPixelSize(1), tileX + spritePos.x, tileY + spritePos.y, { "ma": color },
                 this.direction == DirectionType.UP || this.direction == DirectionType.RIGHT,
                 this.direction == DirectionType.DOWN || this.direction == DirectionType.RIGHT);
         }

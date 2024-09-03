@@ -72,8 +72,6 @@ export const GameVars = {
 
     gameBoardSize: 9,
 
-    keys: {},
-
     characterPos: {
         [CharacterType.SHIELD]: {
             [DirectionType.LEFT]: new Point(4, -7),

@@ -20,7 +20,7 @@ const init = () => {
     mainMenuCanv = createElem(mainMenuDiv, "canvas");
 
     gameDiv = createElem(mainDiv, "div", "game");
-    gameBoardDiv = createElem(gameDiv, "div", "board-div")
+    gameBoardDiv = createElem(gameDiv, "div", "board-div");
 
     createFpsElement(mainDiv);
     GameVars.updatePixelSize(window.innerWidth, window.innerHeight);
@@ -36,9 +36,9 @@ const init = () => {
 
 const initHandlers = () => {
     gameBoardDiv.onmousemove = (event) => { game.mov(event.pageX, event.pageY) };
-    gameBoardDiv.onmousedown = (e) => { game.click(e.clientX, e.clientY) };
+    gameBoardDiv.onmousedown = (e) => { !game.isEnemyTurn && game.click(e.clientX, e.clientY) };
 
-    gameBoardDiv.ontouchstart = (e) => { game.click(e.touches[0].clientX, e.touches[0].clientY) };
+    gameBoardDiv.ontouchstart = (e) => { !game.isEnemyTurn && game.click(e.touches[0].clientX, e.touches[0].clientY) };
 }
 
 const gameLoop = () => {

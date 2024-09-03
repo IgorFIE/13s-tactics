@@ -134,7 +134,7 @@ export class Board {
         return targetTile;
     }
 
-    moveCharacter(targetTile) {
+    moveCharacter(targetTile, isEnemyMov) {
         //clean selection
         this.boardTiles.forEach(row => row.forEach(tile => tile.click(0, 0)));
 
@@ -148,10 +148,10 @@ export class Board {
         this.boardTiles[this.selectedCharacter.y][this.selectedCharacter.x].character = this.selectedCharacter;
 
         // new select
-        this.select();
+        this.select(isEnemyMov);
     }
 
-    select() {
+    select(isEnemyMov) {
         if (this.selectedCharacter) {
             const x = this.selectedCharacter.x;
             const y = this.selectedCharacter.y;
@@ -161,16 +161,16 @@ export class Board {
             const dist = GameVars.characterStatus[this.selectedCharacter.characterType].dist;
             const movType = GameVars.characterStatus[this.selectedCharacter.characterType].movType;
             if (movType === MovType.DIRECTIONAL || movType === MovType.BOTH) {
-                this.loopDirection(dist, (i) => y - i >= 0 && this.validateCollision(x, y, 0, - i, DirectionType.UP, characterType));
-                this.loopDirection(dist, (i) => y + i < GameVars.gameBoardSize && this.validateCollision(x, y, 0, i, DirectionType.DOWN, characterType));
-                this.loopDirection(dist, (i) => x - i >= 0 && this.validateCollision(x, y, - i, 0, DirectionType.LEFT, characterType));
-                this.loopDirection(dist, (i) => x + i < GameVars.gameBoardSize && this.validateCollision(x, y, i, 0, DirectionType.RIGHT, characterType));
+                this.loopDirection(dist, (i) => y - i >= 0 && this.validateCollision(x, y, 0, - i, DirectionType.UP, characterType, isEnemyMov));
+                this.loopDirection(dist, (i) => y + i < GameVars.gameBoardSize && this.validateCollision(x, y, 0, i, DirectionType.DOWN, characterType, isEnemyMov));
+                this.loopDirection(dist, (i) => x - i >= 0 && this.validateCollision(x, y, - i, 0, DirectionType.LEFT, characterType, isEnemyMov));
+                this.loopDirection(dist, (i) => x + i < GameVars.gameBoardSize && this.validateCollision(x, y, i, 0, DirectionType.RIGHT, characterType, isEnemyMov));
             }
             if (movType === MovType.DIAGONAL || movType === MovType.BOTH) {
-                this.loopDirection(dist, (i) => y - i >= 0 && x - i >= 0 && this.validateCollision(x, y, - i, - i, DirectionType.UP, characterType));
-                this.loopDirection(dist, (i) => y + i < GameVars.gameBoardSize && x + i < GameVars.gameBoardSize && this.validateCollision(x, y, i, i, DirectionType.DOWN, characterType));
-                this.loopDirection(dist, (i) => x - i >= 0 && y + i < GameVars.gameBoardSize && this.validateCollision(x, y, - i, i, DirectionType.LEFT, characterType));
-                this.loopDirection(dist, (i) => y - i >= 0 && x + i < GameVars.gameBoardSize && this.validateCollision(x, y, i, - i, DirectionType.RIGHT, characterType));
+                this.loopDirection(dist, (i) => y - i >= 0 && x - i >= 0 && this.validateCollision(x, y, - i, - i, DirectionType.UP, characterType, isEnemyMov));
+                this.loopDirection(dist, (i) => y + i < GameVars.gameBoardSize && x + i < GameVars.gameBoardSize && this.validateCollision(x, y, i, i, DirectionType.DOWN, characterType, isEnemyMov));
+                this.loopDirection(dist, (i) => x - i >= 0 && y + i < GameVars.gameBoardSize && this.validateCollision(x, y, - i, i, DirectionType.LEFT, characterType, isEnemyMov));
+                this.loopDirection(dist, (i) => y - i >= 0 && x + i < GameVars.gameBoardSize && this.validateCollision(x, y, i, - i, DirectionType.RIGHT, characterType, isEnemyMov));
             }
         }
     }
@@ -181,21 +181,32 @@ export class Board {
         }
     }
 
-    validateCollision(x, y, xValue, yValue, directionType, characterType) {
-        if (this.boardTiles[y + yValue][x + xValue].tileType === TileType.WALL && characterType !== CharacterType.MELEE) return true;
-        if (this.boardTiles[y + yValue][x + xValue].character?.isPlayer) return true;
-        if (this.boardTiles[y + yValue][x + xValue].character?.characterType === CharacterType.SHIELD &&
-            this.validateShieldCollision(x, y, this.boardTiles[y + yValue][x + xValue].character)) return true;
-        this.boardTiles[y + yValue][x + xValue].select(directionType);
-        if (this.boardTiles[y + yValue][x + xValue].character && !this.boardTiles[y + yValue][x + xValue].isPlayer) return true;
+    validateCollision(x, y, xValue, yValue, directionType, characterType, isEnemyMov) {
+        const tile = this.boardTiles[y + yValue][x + xValue];
+        if (tile.tileType === TileType.WALL && characterType !== CharacterType.MELEE) return true;
+
+        if (isEnemyMov) {
+            if (tile.character && !tile.character.isPlayer) return true;
+        } else {
+            if (tile.character?.isPlayer) return true;
+        }
+
+        if (tile.character?.characterType === CharacterType.SHIELD && this.validateShieldCollision(x, y, tile.character)) return true;
+        tile.select(directionType);
+
+        if (isEnemyMov) {
+            if (tile.character && tile.isPlayer) return true;
+        } else {
+            if (tile.character && !tile.isPlayer) return true;
+        }
     }
 
-    validateShieldCollision(x, y, enemy) {
-        switch (enemy.direction) {
-            case DirectionType.UP: return y < enemy.y;
-            case DirectionType.DOWN: return y > enemy.y;
-            case DirectionType.LEFT: return x < enemy.x;
-            case DirectionType.RIGHT: return x > enemy.x;
+    validateShieldCollision(x, y, character) {
+        switch (character.direction) {
+            case DirectionType.UP: return y < character.y;
+            case DirectionType.DOWN: return y > character.y;
+            case DirectionType.LEFT: return x < character.x;
+            case DirectionType.RIGHT: return x > character.x;
         }
     }
 
@@ -219,10 +230,10 @@ export class Board {
         return value * toBoardPixelSize(1) / this.lastPixelSize;
     }
 
-    draw() {
+    draw(isEnemyTurn) {
         this.boardCtx.clearRect(0, 0, this.boardCanvas.width, this.boardCanvas.height);
         this.boardTiles.forEach(tileRow => tileRow.forEach(tile => tile.drawBack()));
-        this.boardTiles.forEach(tileRow => tileRow.forEach(tile => tile.drawMiddle()));
+        this.boardTiles.forEach(tileRow => tileRow.forEach(tile => tile.drawMiddle(isEnemyTurn)));
         this.boardTiles.forEach(tileRow => tileRow.forEach(tile => tile.drawFront()));
     }
 

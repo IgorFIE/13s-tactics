@@ -16,6 +16,7 @@ export class UI {
         this.createZoomBtns();
         this.createResetBtn();
         this.createCharacterIcons();
+        this.createStartPlayerTurnBtn();
     }
 
     createResetBtn() {
@@ -27,7 +28,7 @@ export class UI {
     }
 
     createTimer() {
-        this.timer = createElem(this.uiDiv, "canvas", null, null, toPixelSize(52), toPixelSize(34));
+        this.timer = createElem(this.uiDiv, "canvas", null, null, toPixelSize(80), toPixelSize(34));
         this.timer.style.translate = ((GameVars.gameW - this.timer.width) / 2) + 'px ' + (toPixelSize(8)) + 'px';
         this.timerCtx = this.timer.getContext("2d");
         this.drawTimer();
@@ -35,9 +36,15 @@ export class UI {
 
     drawTimer() {
         this.timerCtx.clearRect(0, 0, this.timer.width, this.timer.height);
-        genSmallBox(this.timer, 0, 0, 51, 33, toPixelSize(1), "#3e3846", "#1b1116");
-        drawPixelTextInCanvas("TIME", this.timer, toPixelSize(1), 26, 8, "#00bcd4", 1);
-        drawPixelTextInCanvas(this.currentTime, this.timer, toPixelSize(1), 26, 21, "#9bf2fa", 3);
+        genSmallBox(this.timer, 0, 0, 78, 33, toPixelSize(1), "#3e3846", "#1b1116");
+        if (this.game.isGamePause) {
+            drawPixelTextInCanvas("BREAKTIME", this.timer, toPixelSize(1), 40, 8, "#00bcd4", 1);
+            drawPixelTextInCanvas("think about actions", this.timer, toPixelSize(1), 40, 17, "#00bcd4", 1);
+            drawPixelTextInCanvas("for next turn", this.timer, toPixelSize(1), 40, 26, "#00bcd4", 1);
+        } else {
+            drawPixelTextInCanvas(this.game.isEnemyTurn ? "enemy turn" : "player turn", this.timer, toPixelSize(1), 40, 8, this.game.isEnemyTurn ? "#ff0000" : "#00bcd4", 1);
+            drawPixelTextInCanvas(this.currentTime, this.timer, toPixelSize(1), 40, 21, this.game.isEnemyTurn ? "#ff0000" : "#9bf2fa", 3);
+        }
     }
 
     createZoomBtns() {
@@ -75,8 +82,39 @@ export class UI {
         ));
     }
 
+    createStartPlayerTurnBtn() {
+        this.startPlayerTurnCanvas = createElem(this.uiDiv, "canvas", null, null, toPixelSize(64), toPixelSize(24), GameVars.isMobile, null, () => {
+            this.game.isGamePause = false;
+            this.startPlayerTurnCanvas.classList.add("hidden");
+            this.currentTime = 13;
+            this.timerInterval = setInterval(() => {
+                this.currentTime--;
+                if (this.currentTime === 0 && !this.game.isEnemyTurn) {
+                    this.game.isEnemyTurn = true;
+                    this.currentTime = 13;
+                } else if (this.currentTime === 0 && this.game.isEnemyTurn) {
+                    this.game.isEnemyTurn = false;
+                    this.game.isGamePause = true;
+                    this.startPlayerTurnCanvas.classList.remove("hidden");
+                    clearInterval(this.timerInterval);
+                }
+            }, 1000)
+        });
+        this.startPlayerTurnCanvas.style.translate = ((GameVars.gameW - this.startPlayerTurnCanvas.width) / 2) + 'px ' +
+            (GameVars.gameH - this.startPlayerTurnCanvas.height - toPixelSize(8)) + 'px';
+        genSmallBox(this.startPlayerTurnCanvas, 0, 0, 62, 23, toPixelSize(1), "#3e3846", "#1b1116");
+        drawPixelTextInCanvas("start player", this.startPlayerTurnCanvas, toPixelSize(1), 31, 8, "#9bf2fa", 1);
+        drawPixelTextInCanvas("turn", this.startPlayerTurnCanvas, toPixelSize(1), 31, 16, "#9bf2fa", 1);
+    }
+
+    reset() {
+        clearInterval(this.timerInterval);
+        this.uiDiv.remove();
+    }
+
     update(character) {
         this.uiCharacters.forEach(uiChar => uiChar.update(character));
+
     }
 
     draw() {

@@ -105,10 +105,10 @@ export class Board {
         this.boardTiles[y][x].character = new Character(x, y, characterType, directionType, isPlayer);
     }
 
-    click(x, y) {
+    click(x, y, isPaused) {
         let targetTile = this.retrieveTargetTile(x, y);
         if (this.selectedCharacter && !!targetTile) {
-            this.moveCharacter(targetTile);
+            if (!isPaused) this.moveCharacter(targetTile);
         } else {
             this.selectedCharacter = null;
             this.boardTiles.forEach(row => row.forEach(tile => {

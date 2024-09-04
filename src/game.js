@@ -1,6 +1,7 @@
 import { Board } from "./entities/board";
 import { UI } from "./entities/ui";
 import { DirectionType } from "./enum/direction-type";
+import { GameVars } from "./game-variables";
 import { Levels } from "./levels";
 import { aStar } from "./utilities/astar";
 
@@ -9,9 +10,10 @@ export class Game {
         this.gameDiv = gameDiv;
     }
 
-    init() {
+    init(levelIndex) {
+        this.levelIndex = levelIndex;
         this.gameDiv.innerHtml = "";
-        this.level = Levels[0];
+        this.level = Levels[levelIndex];
         this.board = new Board(this.gameDiv, this.level.boardWalls);
         this.playerCharacters = this.createCharacters(this.level.playerCharacters, true);
         this.enemyCharacters = this.createCharacters(this.level.enemiesCharacters, false);
@@ -21,6 +23,8 @@ export class Game {
         this.board.select();
 
         this.aStarAlgorithm = new aStar();
+
+        this.isGamePause = true;
         this.isEnemyTurn = false;
         this.resetEnemyMovement = true;
     }
@@ -36,7 +40,7 @@ export class Game {
     }
 
     click(x, y) {
-        this.board.click(x, y);
+        this.board.click(x, y, this.isGamePause);
         this.cleanCharacters();
     }
 
@@ -45,8 +49,20 @@ export class Game {
     }
 
     update() {
+        this.changeLevel();
         this.ui.update(this.board.selectedCharacter);
+        if (this.isGamePause) return;
         if (this.isEnemyTurn) this.enemyTurn();
+    }
+
+    changeLevel() {
+        if (this.enemyCharacters.length === 0) {
+            this.reset();
+            this.levelIndex++;
+            if (this.levelIndex < Levels.length) {
+                this.init(this.levelIndex);
+            }
+        }
     }
 
     enemyTurn() {
@@ -107,11 +123,7 @@ export class Game {
         this.ui.draw();
     }
 
-    isGameOver() {
-        return this.playerCharacters.length === 0;
-    }
-
-    isPlayerWin() {
-        return this.enemyCharacters.length === 0;
+    reset() {
+        this.ui.reset();
     }
 }

@@ -9,9 +9,6 @@ let mainMenuCanv;
 let gameDiv;
 let gameBoardDiv;
 
-let fpsInterval = 1000 / GameVars.fps;
-let then = Date.now();
-
 let game;
 
 const init = () => {
@@ -28,7 +25,7 @@ const init = () => {
     setElemSize(mainMenuCanv, toPixelSize(GameVars.gameWdAsPixels), toPixelSize(GameVars.gameHgAsPixels));
 
     game = new Game(gameBoardDiv);
-    game.init();
+    game.init(0);
     initHandlers();
 
     window.requestAnimationFrame(() => gameLoop());
@@ -42,14 +39,8 @@ const initHandlers = () => {
 }
 
 const gameLoop = () => {
-    elapsed = Date.now() - then;
-    if (elapsed > fpsInterval) {
-        then = Date.now() - (elapsed % fpsInterval);
-        GameVars.deltaTime = elapsed / 1000;
-        // updateFps(then);
-        game.update();
-        game.draw();
-    }
+    game.update();
+    game.draw();
     window.requestAnimationFrame(() => gameLoop());
 }
 

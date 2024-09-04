@@ -97,6 +97,7 @@ export class Tile {
     drawBack() {
         fillPolygon(this.leftLines, this.tileType == TileType.WALL ? "#3e3846" : "#38252e", this.ctx);
         fillPolygon(this.rightLines, this.tileType == TileType.WALL ? "#1b1116" : "#2f1519", this.ctx);
+        // const chessLikeTopColor = (this.boardX % 2 === 0 && this.boardY % 2 === 0) || (this.boardX % 2 === 1 && this.boardY % 2 === 1) ? "#3c4f68" : "#686b7a";
         fillPolygon(this.topLines, this.tileType == TileType.WALL ? "#edeef7" : "#686b7a", this.ctx);
 
         this.leftLines.forEach(pixel => pixel.draw(this.ctx));

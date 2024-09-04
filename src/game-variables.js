@@ -57,9 +57,6 @@ export const GameVars = {
     gameW,
     gameH,
 
-    fps: 60,
-    deltaTime,
-
     pixelSize,
     boardPixelSize,
     gameWdAsPixels,

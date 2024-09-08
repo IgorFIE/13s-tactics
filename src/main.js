@@ -81,6 +81,7 @@ const drawCharacter = (ctx, pixelSize, x, y, sprite, colors, isInvert) => {
     const charPixel = toPixelSize(pixelSize);
     const charCenterW = Math.round((GameVars.gameW / 2) / charPixel);
     const charCenterH = Math.round((GameVars.gameH / 2) / charPixel);
+    genSmallBox(mainMenuCanv, charCenterW + x - 1, charCenterH + y + 9, 16, 10, charPixel, "#00000033", "#00000033");
     drawSprite(ctx, sprite, charPixel, charCenterW + x, charCenterH + y, colors, isInvert);
 }
 

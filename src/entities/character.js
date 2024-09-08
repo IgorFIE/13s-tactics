@@ -2,6 +2,7 @@ import { CharacterType } from "../enum/character-type";
 import { DirectionType } from "../enum/direction-type";
 import { GameVars, toBoardPixelSize } from "../game-variables";
 import { EnemySwatColors, MeleeSwatBottom, MeleeSwatTop, PlayerSwatColors, RangeSwatBottom, RangeSwatTop, ShieldSwatBottom, ShieldSwatTop } from "../sprites/swat-sprites";
+import { genSmallBox } from "../utilities/box-generator";
 import { drawSprite } from "../utilities/draw-utilities";
 
 export class Character {
@@ -21,6 +22,7 @@ export class Character {
 
     draw(tileX, tileY, ctx) {
         const spritePos = GameVars.characterPos[this.characterType][this.direction];
+        genSmallBox(ctx.canvas, tileX + (GameVars.tileXRatio / 2), tileY + (GameVars.tileYRatio / 2), GameVars.tileXRatio, GameVars.tileYRatio, toBoardPixelSize(1), "#00000033", "#00000033");
         switch (this.direction) {
             case DirectionType.UP:
             case DirectionType.LEFT:

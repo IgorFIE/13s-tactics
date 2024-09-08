@@ -146,7 +146,7 @@ const gameLoop = () => {
     game.draw();
 
     drawSoundBtn();
-    GameVars.sound?.playMusic();
+    // GameVars.sound?.playMusic();
     window.requestAnimationFrame(() => gameLoop());
 }
 

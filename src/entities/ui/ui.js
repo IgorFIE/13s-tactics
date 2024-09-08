@@ -114,6 +114,7 @@ export class UI {
             this.game.isGamePause = false;
             this.startPlayerTurnCanvas.classList.add("hidden");
             this.currentTime = 13;
+            clearInterval(this.timerInterval);
             this.timerInterval = setInterval(() => {
                 this.currentTime--;
                 if (this.currentTime === 0 && !this.game.isEnemyTurn) {

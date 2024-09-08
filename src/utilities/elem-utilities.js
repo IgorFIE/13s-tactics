@@ -10,10 +10,7 @@ export const createElem = (parentElem, elemType, id, classList, width, height, i
     if (width) elem.width = width;
     if (height) elem.height = height;
     if (backgroundColor) elem.style.backgroundColor = backgroundColor;
-    if (clickFn) {
-        elem.addEventListener(isMobile ? 'touchstart' : 'mousedown', (e) => eventFn(e, clickFn));
-        if (isMobile) elem.addEventListener('touchmove', (e) => eventFn(e, clickFn));
-    }
+    if (clickFn) elem.addEventListener(isMobile ? 'touchstart' : 'mousedown', (e) => eventFn(e, clickFn))
     if (endClickFn) elem.addEventListener(isMobile ? 'touchend' : 'mouseup', (e) => eventFn(e, endClickFn));
     parentElem.appendChild(elem);
     return elem;

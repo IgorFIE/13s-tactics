@@ -27,11 +27,11 @@ export class Sound {
     }
 
     clickSound() {
-        this.playSound("triangle", 174.6, 1, 0, 0.2);
+        this.playSound("triangle", 174.6, 0.5, 0, 0.2);
     }
 
     moveSound() {
-        this.playSound("triangle", 110, 1, 0, 0.1);
+        this.playSound("triangle", 110, 0.8, 0, 0.1);
     }
 
     playerDeadSound() {
@@ -41,8 +41,8 @@ export class Sound {
     }
 
     victorySound() {
-        this.playSound("square", 932.3, 0.4, 0, 0.1);
-        this.playSound("square", 1865, 0.4, 0.1, 0.2);
+        this.playSound("square", 932.3, 0.2, 0, 0.1);
+        this.playSound("square", 1865, 0.2, 0.1, 0.2);
     }
 
     playOverSound() {
@@ -55,19 +55,19 @@ export class Sound {
         if (this.isSoundOn && this.isSoundInitialized) {
             if (this.currentTime >= (this.loopMaxTime / this.notesPeerLoop)) {
 
-                this.playSound("sine", mB[this.musicBassNote], 1, 0, 0.8);
+                this.playSound("sine", mB[this.musicBassNote], 0.5, 0, 0.8);
                 this.musicBassNote++;
                 this.musicBassNote >= mB.length && (this.musicBassNote = 0);
 
-                this.playSound("square", mM[this.musicElectricNote], 0.03, 0.1, 8);
+                this.playSound("square", mM[this.musicElectricNote], 0.04, 0.1, 0.8);
                 this.musicElectricNote++;
                 this.musicElectricNote >= mM.length && (this.musicElectricNote = 0);
 
-                this.playSound("sine", mB[this.musicBass2Note], 1, 0, 0.8);
+                this.playSound("sine", mB[this.musicBass2Note], 0.5, 0.3, 0.8);
                 this.musicBass2Note++;
                 this.musicBass2Note >= mB.length && (this.musicBass2Note = 0);
 
-                this.playSound("square", mR[this.musicRythmNote], 0.01, 0, 0.8);
+                this.playSound("square", mR[this.musicRythmNote], 0.02, 0, 0.8);
                 this.musicRythmNote++;
                 this.musicRythmNote >= mR.length && (this.musicRythmNote = 0);
 

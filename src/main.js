@@ -1,17 +1,22 @@
 const { GameVars, toPixelSize } = require("./game-variables");
-const { createFpsElement, updateFps } = require("./utilities/fps-utilities");
-const { setElemSize, createElem } = require("./utilities/elem-utilities");
+const { createElem } = require("./utilities/elem-utilities");
 const { Game } = require("./game");
 const { genSmallBox } = require("./utilities/box-generator");
 const { drawPixelTextInCanvas } = require("./utilities/text");
 const { drawSprite, createPixelLine } = require("./utilities/draw-utilities");
 const { ShieldSwatBottom, PlayerSwatColors, EnemySwatColors, RangeSwatBottom, MeleeSwatBottom } = require("./sprites/swat-sprites");
+const { Sound } = require("./sound/sound");
+const { SpeakerSprite, AudioSprite } = require("./sprites/sound-sprites");
 
 let mainDiv;
 
 let mainMenuDiv;
 let mainMenuCanv;
 let mainMenuBtn;
+
+let soundBtnCanv;
+let soundBtnCtx;
+let lastSoundState = true; // so we draw it at the start
 
 let gameDiv;
 let gameBoardDiv;
@@ -27,6 +32,7 @@ const init = () => {
     gameBoardDiv = createElem(gameDiv, "div", "board-div");
 
     createMainMenu();
+    createSoundBtn();
 
     game = new Game(gameBoardDiv);
 
@@ -41,8 +47,8 @@ const createMainMenu = () => {
 
     const backLines = []
     for (let i = 0; i < GameVars.gameHgAsPixels / 12; i++) {
-        createPixelLine(0, 12 * i, GameVars.gameWdAsPixels, 12 * i, "#1b1116", toPixelSize(2), backLines);
-        createPixelLine(0, 12 * i + 2, GameVars.gameWdAsPixels, 12 * i + 2, "#1b1116", toPixelSize(2), backLines);
+        createPixelLine(0, 6 * i, GameVars.gameWdAsPixels, 6 * i, "#1b1116", toPixelSize(2), backLines);
+        createPixelLine(0, 6 * i + 2, GameVars.gameWdAsPixels, 6 * i + 2, "#1b1116", toPixelSize(2), backLines);
     }
     backLines.forEach(line => line.draw(mainMenuCtx));
 
@@ -85,27 +91,59 @@ const drawCharacter = (ctx, pixelSize, x, y, sprite, colors, isInvert) => {
     drawSprite(ctx, sprite, charPixel, charCenterW + x, charCenterH + y, colors, isInvert);
 }
 
+const createSoundBtn = () => {
+    soundBtnCanv = createElem(mainDiv, "canvas", "soundbtn", null, toPixelSize(18), toPixelSize(18), GameVars.isMobile, null, () => GameVars.sound?.muteMusic());
+    soundBtnCtx = soundBtnCanv.getContext("2d");
+    soundBtnCanv.style.translate = (GameVars.gameW - soundBtnCanv.width - toPixelSize(13)) + 'px ' + toPixelSize(13) + 'px';
+}
+
+const drawSoundBtn = () => {
+    let isSoundOn = GameVars.sound && GameVars.sound.isSoundOn;
+    if (lastSoundState !== isSoundOn) {
+        lastSoundState = isSoundOn;
+        soundBtnCtx.clearRect(0, 0, soundBtnCanv.width, soundBtnCanv.height);
+        genSmallBox(soundBtnCanv, 0, 0, 17, 17, toPixelSize(1), isSoundOn ? "#9bf2fa" : "#9bf2fa", isSoundOn ? "#9bf2fa66" : "#1b1116");
+        drawSprite(soundBtnCtx, SpeakerSprite, toPixelSize(1), 4, 6);
+        isSoundOn && drawSprite(soundBtnCtx, AudioSprite, toPixelSize(1), 10, 4);
+    }
+}
+
 const createMainBtnStartBtn = () => {
     mainMenuBtn = createElem(mainMenuDiv, "canvas", null, null, toPixelSize(112), toPixelSize(32), GameVars.isMobile, null, () => {
+        soundBtnCanv.style.translate = (GameVars.gameW - soundBtnCanv.width - toPixelSize(8)) + 'px ' + toPixelSize(36) + 'px';
         mainMenuDiv.classList.add("hidden");
+        GameVars.sound?.clickSound();
         game.init(0);
     });
 
     mainMenuBtn.style.translate = ((GameVars.gameW / 2) - (mainMenuBtn.width / 2)) + 'px ' + ((GameVars.gameH / 3) * 2) + 'px';
-    genSmallBox(mainMenuBtn, 0, 0, 110, 30, toPixelSize(1), "#3e3846", "#1b1116");
+    genSmallBox(mainMenuBtn, 0, 0, 110, 30, toPixelSize(1), "#9bf2fa", "#1b1116");
     drawPixelTextInCanvas("start game", mainMenuBtn, toPixelSize(1), 56, 16, "#9bf2fa", 2);
 }
 
 const initHandlers = () => {
+    window.addEventListener("click", (e) => initAudio());
+    window.addEventListener("touch", (e) => initAudio());
+
     gameBoardDiv.onmousemove = (event) => { game.mov(event.pageX, event.pageY) };
     gameBoardDiv.onmousedown = (e) => { !game.isEnemyTurn && game.click(e.clientX, e.clientY) };
 
     gameBoardDiv.ontouchstart = (e) => { !game.isEnemyTurn && game.click(e.touches[0].clientX, e.touches[0].clientY) };
 }
 
+const initAudio = () => {
+    if (!GameVars.sound) {
+        GameVars.sound = new Sound();
+        GameVars.sound.initSound();
+    }
+}
+
 const gameLoop = () => {
     game.update();
     game.draw();
+
+    drawSoundBtn();
+    GameVars.sound?.playMusic();
     window.requestAnimationFrame(() => gameLoop());
 }
 

@@ -34,6 +34,7 @@ export class UI {
         this.resetBoardBtn = createElem(this.uiDiv, "canvas", null, null, toPixelSize(52), toPixelSize(24), GameVars.isMobile, null, () => {
             this.resetClick = true;
             this.game.board.resetBoardPos();
+            GameVars.sound.clickSound();
         }, () => setTimeout(() => this.resetClick = false, 50));
         this.resetBoardBtn.style.translate = (GameVars.gameW - this.resetBoardBtn.width - toPixelSize(8)) + 'px ' + (GameVars.gameH - this.resetBoardBtn.height - toPixelSize(8)) + 'px';
     }
@@ -75,6 +76,7 @@ export class UI {
             this.plusClick = true;
             GameVars.boardPixelSize++;
             this.game.updateZoom();
+            GameVars.sound.clickSound();
         }, () => setTimeout(() => this.plusClick = false, 50));
         this.zoomPlus.style.translate = (GameVars.gameW - this.zoom.width - toPixelSize(4)) + 'px ' + (((GameVars.gameH - this.zoom.height) / 2) + toPixelSize(15)) + 'px';
 
@@ -83,6 +85,7 @@ export class UI {
             GameVars.boardPixelSize--;
             GameVars.boardPixelSize = GameVars.boardPixelSize < 1 ? 1 : GameVars.boardPixelSize;
             this.game.updateZoom();
+            GameVars.sound.clickSound();
         }, () => setTimeout(() => this.minusClick = false, 50));
         this.zoomMinus.style.translate = (GameVars.gameW - this.zoom.width - toPixelSize(4)) + 'px ' + (((GameVars.gameH - this.zoom.height) / 2) + toPixelSize(37)) + 'px';
     }
@@ -107,6 +110,7 @@ export class UI {
 
     createStartPlayerTurnBtn() {
         this.startPlayerTurnCanvas = createElem(this.uiDiv, "canvas", null, null, toPixelSize(64), toPixelSize(24), GameVars.isMobile, null, () => {
+            GameVars.sound.clickSound();
             this.game.isGamePause = false;
             this.startPlayerTurnCanvas.classList.add("hidden");
             this.currentTime = 13;
@@ -136,6 +140,7 @@ export class UI {
         this.endModalCanvas = createElem(this.endModalDiv, "canvas", null, null, GameVars.gameW, GameVars.gameH, GameVars.isMobile, "#000000cc");
 
         this.endModalBtn = createElem(this.endModalDiv, "canvas", null, null, toPixelSize(48), toPixelSize(20), GameVars.isMobile, "#00000066", () => {
+            GameVars.sound.clickSound();
             if (this.game.enemyCharacters.length == 0) {
                 this.game.isChangeLevel = true;
             }
@@ -168,6 +173,8 @@ export class UI {
     update(character) {
         this.uiCharacters.forEach(uiChar => uiChar.update(character));
         if (!this.isDisplayingModal && (this.game.enemyCharacters.length == 0 || this.game.playerCharacters.length == 0)) {
+            if (this.game.playerCharacters.length == 0) GameVars.sound.playOverSound();
+            if (this.game.enemyCharacters.length == 0) GameVars.sound.victorySound();
             this.isDisplayingModal = true;
             clearInterval(this.timerInterval);
             this.endModalDiv.classList.remove("hidden");

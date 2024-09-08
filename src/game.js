@@ -1,5 +1,6 @@
 import { Board } from "./entities/board";
 import { UI } from "./entities/ui";
+import { GameVars } from "./game-variables";
 import { Levels } from "./levels";
 import { aStar } from "./utilities/astar";
 
@@ -114,10 +115,15 @@ export class Game {
     }
 
     cleanCharacters() {
-        const countBeforeFilter = this.playerCharacters.length;
+        const countBeforeFilterPlayer = this.playerCharacters.length;
         this.playerCharacters = this.playerCharacters.filter(char => this.board.boardTiles[char.y][char.x].character === char);
-        if (countBeforeFilter != this.playerCharacters.length) this.ui.createCharacterIcons();
+        if (countBeforeFilterPlayer != this.playerCharacters.length) {
+            GameVars.sound.deadSound();
+            this.ui.createCharacterIcons();
+        }
+        const countBeforeFilterEnemy = this.enemyCharacters.length;
         this.enemyCharacters = this.enemyCharacters.filter(char => this.board.boardTiles[char.y][char.x].character === char);
+        if (countBeforeFilterEnemy != this.enemyCharacters.length) GameVars.sound.deadSound();
     }
 
     updateZoom() {

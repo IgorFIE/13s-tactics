@@ -114,6 +114,7 @@ export class Board {
             this.boardTiles.forEach(row => row.forEach(tile => {
                 if (tile.click(x, y)) {
                     this.selectedCharacter = tile.character;
+                    GameVars.sound.clickSound();
                 }
             }));
             this.select();
@@ -149,6 +150,8 @@ export class Board {
 
         // new select
         this.select(isEnemyMov);
+
+        GameVars.sound.moveSound();
     }
 
     select(isEnemyMov) {

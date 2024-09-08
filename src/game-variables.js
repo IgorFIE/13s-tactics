@@ -10,13 +10,13 @@ let highScore = parseInt(localStorage.getItem(storeId)) || 0;
 
 const isMobile = navigator.maxTouchPoints > 1 && navigator.maxTouchPoints !== 256;
 
+let sound;
+
 let lastGameW;
 let lastGameH;
 
 let gameW;
 let gameH;
-
-let deltaTime;
 
 let pixelSize;
 let boardPixelSize;
@@ -50,6 +50,8 @@ export const GameVars = {
     highScore,
 
     isMobile,
+
+    sound,
 
     lastGameW,
     lastGameH,

@@ -15,6 +15,7 @@ export class UiCharacter {
                 game.board.click(0, 0);
                 game.board.selectedCharacter = character;
                 game.board.select();
+                GameVars.sound.clickSound();
             }
         });
         this.canvas.style.translate = x + 'px ' + y + 'px';
@@ -22,7 +23,6 @@ export class UiCharacter {
         this.ctx = this.canvas.getContext("2d");
     }
 
-    // todo implement update
     update(character) {
         this.isCharacterSelected = !!character && this.character === character;
     }

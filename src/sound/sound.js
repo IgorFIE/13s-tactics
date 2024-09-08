@@ -34,7 +34,7 @@ export class Sound {
         this.playSound("triangle", 110, 1, 0, 0.1);
     }
 
-    deadSound() {
+    playerDeadSound() {
         this.playSound("square", 18.35, 0.1, 0, 0.1);
         this.playSound("square", 36.71, 0.1, 0.1, 0.2);
         this.playSound("square", 73.42, 0.1, 0.2, 0.2);

@@ -174,8 +174,6 @@ export class UI {
     update(character) {
         this.uiCharacters.forEach(uiChar => uiChar.update(character));
         if (!this.isDisplayingModal && (this.game.enemyCharacters.length == 0 || this.game.playerCharacters.length == 0)) {
-            if (this.game.playerCharacters.length == 0) GameVars.sound.playOverSound();
-            if (this.game.enemyCharacters.length == 0) GameVars.sound.victorySound();
             this.isDisplayingModal = true;
             clearInterval(this.timerInterval);
             this.endModalDiv.classList.remove("hidden");

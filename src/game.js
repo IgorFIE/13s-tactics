@@ -121,12 +121,12 @@ export class Game {
         const countBeforeFilterPlayer = this.playerCharacters.length;
         this.playerCharacters = this.playerCharacters.filter(char => this.board.boardTiles[char.y][char.x].character === char);
         if (countBeforeFilterPlayer != this.playerCharacters.length) {
-            GameVars.sound.deadSound();
+            GameVars.sound.playerDeadSound();
             this.ui.createCharacterIcons();
         }
         const countBeforeFilterEnemy = this.enemyCharacters.length;
         this.enemyCharacters = this.enemyCharacters.filter(char => this.board.boardTiles[char.y][char.x].character === char);
-        if (countBeforeFilterEnemy != this.enemyCharacters.length) GameVars.sound.deadSound();
+        if (countBeforeFilterEnemy != this.enemyCharacters.length) GameVars.sound.victorySound();
     }
 
     updateZoom() {

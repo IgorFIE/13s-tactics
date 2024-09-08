@@ -95,7 +95,7 @@ export class aStar {
     retrieveLowestScore() {
         let s = null;
         this.openList.forEach((node, i) => {
-            if (s == null || node.H <= s.H) s = node;
+            if (s == null || node.h <= s.h) s = node;
         });
         if (!!s) {
             this.openList = this.openList.filter(node => node.id != s.id);

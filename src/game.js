@@ -1,5 +1,5 @@
 import { Board } from "./entities/board";
-import { UI } from "./entities/ui";
+import { UI } from "./entities/ui/ui";
 import { GameVars } from "./game-variables";
 import { Levels } from "./levels";
 import { aStar } from "./utilities/astar";

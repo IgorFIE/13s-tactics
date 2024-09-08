@@ -92,7 +92,10 @@ const drawCharacter = (ctx, pixelSize, x, y, sprite, colors, isInvert) => {
 }
 
 const createSoundBtn = () => {
-    soundBtnCanv = createElem(mainDiv, "canvas", "soundbtn", null, toPixelSize(18), toPixelSize(18), GameVars.isMobile, null, () => GameVars.sound?.muteMusic());
+    soundBtnCanv = createElem(mainDiv, "canvas", "soundbtn", null, toPixelSize(18), toPixelSize(18), GameVars.isMobile, null, () => {
+        initAudio()
+        GameVars.sound?.muteMusic();
+    });
     soundBtnCtx = soundBtnCanv.getContext("2d");
     soundBtnCanv.style.translate = (GameVars.gameW - soundBtnCanv.width - toPixelSize(13)) + 'px ' + toPixelSize(13) + 'px';
 }
@@ -112,6 +115,7 @@ const createMainBtnStartBtn = () => {
     mainMenuBtn = createElem(mainMenuDiv, "canvas", null, null, toPixelSize(112), toPixelSize(32), GameVars.isMobile, null, () => {
         soundBtnCanv.style.translate = (GameVars.gameW - soundBtnCanv.width - toPixelSize(8)) + 'px ' + toPixelSize(36) + 'px';
         mainMenuDiv.classList.add("hidden");
+        initAudio();
         GameVars.sound?.clickSound();
         game.init(0);
     });
@@ -123,7 +127,6 @@ const createMainBtnStartBtn = () => {
 
 const initHandlers = () => {
     window.addEventListener("click", (e) => initAudio());
-    window.addEventListener("touch", (e) => initAudio());
 
     gameBoardDiv.onmousemove = (event) => { game.mov(event.pageX, event.pageY) };
     gameBoardDiv.onmousedown = (e) => { !game.isEnemyTurn && game.click(e.clientX, e.clientY) };

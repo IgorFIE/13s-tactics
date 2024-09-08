@@ -4,25 +4,48 @@ import { CharacterType } from "./enum/character-type";
 import { DirectionType } from "./enum/direction-type";
 import { MovType } from "./enum/mov-type";
 
-const storeId = 'igorfie-pixel-swat';
-
-let highScore = parseInt(localStorage.getItem(storeId)) || 0;
-
 const isMobile = navigator.maxTouchPoints > 1 && navigator.maxTouchPoints !== 256;
 
-let sound;
+const tileXRatio = 13;
+const tileYRatio = 10;
+const tileDepth = 5;
+const tileWallHeight = 7;
 
-let lastGameW;
-let lastGameH;
+const gameBoardSize = 9;
 
-let gameW;
-let gameH;
+const characterPos = {
+    [CharacterType.SHIELD]: {
+        [DirectionType.LEFT]: new Point(4, -7),
+        [DirectionType.UP]: new Point(9, -7),
+        [DirectionType.RIGHT]: new Point(8, -3),
+        [DirectionType.DOWN]: new Point(4, -3),
+    },
+    [CharacterType.RANGE]: {
+        [DirectionType.LEFT]: new Point(5, -2),
+        [DirectionType.UP]: new Point(9, -2),
+        [DirectionType.RIGHT]: new Point(8, -2),
+        [DirectionType.DOWN]: new Point(5, -2),
+    },
+    [CharacterType.MELEE]: {
+        [DirectionType.LEFT]: new Point(6, -4),
+        [DirectionType.UP]: new Point(6, -4),
+        [DirectionType.RIGHT]: new Point(9, -2),
+        [DirectionType.DOWN]: new Point(4, -2),
+    }
+};
 
-let pixelSize;
-let boardPixelSize;
+const characterStatus = {
+    [CharacterType.SHIELD]: new CharacterStatus(0, 3, 1, MovType.BOTH),
+    [CharacterType.RANGE]: new CharacterStatus(2, 1, 2, MovType.DIAGONAL),
+    [CharacterType.MELEE]: new CharacterStatus(3, 2, 4, MovType.DIRECTIONAL),
+};
 
-let gameWdAsPixels;
-let gameHgAsPixels;
+const moveOptionArrowPos = {
+    [DirectionType.UP]: new Point(10, 6),
+    [DirectionType.RIGHT]: new Point(10, 7),
+    [DirectionType.DOWN]: new Point(9, 7),
+    [DirectionType.LEFT]: new Point(9, 6),
+};
 
 const updatePixelSize = (width, height) => {
     GameVars.lastGameW = GameVars.gameW;
@@ -45,10 +68,21 @@ const pixelCal = (min, max) => {
     return pixelSize >= 1 ? pixelSize : 1;
 };
 
-export const GameVars = {
-    storeId,
-    highScore,
+let sound;
 
+let lastGameW;
+let lastGameH;
+
+let gameW;
+let gameH;
+
+let pixelSize;
+let boardPixelSize;
+
+let gameWdAsPixels;
+let gameHgAsPixels;
+
+export const GameVars = {
     isMobile,
 
     sound,
@@ -64,45 +98,17 @@ export const GameVars = {
     gameWdAsPixels,
     gameHgAsPixels,
 
-    tileXRatio: 13,
-    tileYRatio: 10,
-    tileDepth: 5,
-    tileWallHeight: 7,
+    tileXRatio,
+    tileYRatio,
+    tileDepth,
+    tileWallHeight,
 
-    gameBoardSize: 9,
+    gameBoardSize,
 
-    characterPos: {
-        [CharacterType.SHIELD]: {
-            [DirectionType.LEFT]: new Point(4, -7),
-            [DirectionType.UP]: new Point(9, -7),
-            [DirectionType.RIGHT]: new Point(8, -3),
-            [DirectionType.DOWN]: new Point(4, -3),
-        },
-        [CharacterType.RANGE]: {
-            [DirectionType.LEFT]: new Point(5, -2),
-            [DirectionType.UP]: new Point(9, -2),
-            [DirectionType.RIGHT]: new Point(8, -2),
-            [DirectionType.DOWN]: new Point(5, -2),
-        },
-        [CharacterType.MELEE]: {
-            [DirectionType.LEFT]: new Point(6, -4),
-            [DirectionType.UP]: new Point(6, -4),
-            [DirectionType.RIGHT]: new Point(9, -2),
-            [DirectionType.DOWN]: new Point(4, -2),
-        }
-    },
-    characterStatus: {
-        [CharacterType.SHIELD]: new CharacterStatus(0, 3, 1, MovType.BOTH),
-        [CharacterType.RANGE]: new CharacterStatus(2, 1, 2, MovType.DIAGONAL),
-        [CharacterType.MELEE]: new CharacterStatus(3, 2, 4, MovType.DIRECTIONAL),
-    },
+    characterPos,
+    characterStatus,
 
-    moveOptionArrowPos: {
-        [DirectionType.UP]: new Point(10, 6),
-        [DirectionType.RIGHT]: new Point(10, 7),
-        [DirectionType.DOWN]: new Point(9, 7),
-        [DirectionType.LEFT]: new Point(9, 6),
-    },
+    moveOptionArrowPos,
 
     updatePixelSize,
 }

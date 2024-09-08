@@ -11,7 +11,7 @@ export const genSmallBox = (canvas, startX, startY, endX, endY, pixelSize, color
     generateBox(canvas, startX, startY, endX, endY, pixelSize, color, conditionFn);
 };
 
-export const generateBox = (canvas, startX, startY, endX, endY, pixelSize, color, conditionFn) => {
+const generateBox = (canvas, startX, startY, endX, endY, pixelSize, color, conditionFn) => {
     const ctx = canvas.getContext("2d");
     for (let y = 0; y <= endY; y++) {
         for (let x = 0; x <= endX; x++) {

@@ -97,27 +97,26 @@ export class Tile {
     drawBack() {
         fillPolygon(this.leftLines, this.tileType == TileType.WALL ? "#3e3846" : "#38252e", this.ctx);
         fillPolygon(this.rightLines, this.tileType == TileType.WALL ? "#1b1116" : "#2f1519", this.ctx);
-        // const chessLikeTopColor = (this.boardX % 2 === 0 && this.boardY % 2 === 0) || (this.boardX % 2 === 1 && this.boardY % 2 === 1) ? "#3c4f68" : "#686b7a";
-        fillPolygon(this.topLines, this.tileType == TileType.WALL ? "#edeef7" : "#686b7a", this.ctx);
+        const chessLikeTopColor = (this.boardX % 2 === 0 && this.boardY % 2 === 0) || (this.boardX % 2 === 1 && this.boardY % 2 === 1) ? "#3c4f68" : "#686b7a";
+        fillPolygon(this.topLines, this.tileType == TileType.WALL ? "#edeef7" : chessLikeTopColor, this.ctx);
+        // fillPolygon(this.topLines, this.tileType == TileType.WALL ? "#edeef7" : "#686b7a", this.ctx);
 
         this.leftLines.forEach(pixel => pixel.draw(this.ctx));
         this.rightLines.forEach(pixel => pixel.draw(this.ctx));
         this.topLines.forEach(pixel => pixel.draw(this.ctx));
+
     }
 
     drawMiddle(isEnemyTurn) {
         if (this.isSelected) this.drawHighlight(!isEnemyTurn && (!this.character || this.character.isPlayer) ? "#52804d" : "#ff0000");
         if (this.isHighlight) this.drawHighlight(!isEnemyTurn && (!this.character || this.character.isPlayer) ? "#ffff57" : "#ff0000");
         if (this.isSelected && !this.character) this.directionArrow.draw(this.x, this.y - this.height, this.ctx, isEnemyTurn ? "#ff0000" : "#52804d");
+        this.character?.draw(this.x, this.y - this.height, this.ctx);
+        if (this.isSelected && this.character) this.selectionArrow.draw(this.x, this.y - this.height, this.ctx, !this.character || this.character.isPlayer);
     }
 
     drawHighlight(color) {
         fillPolygon(this.topLines, color + "66", this.ctx);
         this.topLines.forEach(pixel => pixel.draw(this.ctx, color));
-    }
-
-    drawFront() {
-        this.character?.draw(this.x, this.y - this.height, this.ctx);
-        if (this.isSelected && this.character) this.selectionArrow.draw(this.x, this.y - this.height, this.ctx, !this.character || this.character.isPlayer);
     }
 }

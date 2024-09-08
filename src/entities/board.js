@@ -235,9 +235,12 @@ export class Board {
 
     draw(isEnemyTurn) {
         this.boardCtx.clearRect(0, 0, this.boardCanvas.width, this.boardCanvas.height);
-        this.boardTiles.forEach(tileRow => tileRow.forEach(tile => tile.drawBack()));
-        this.boardTiles.forEach(tileRow => tileRow.forEach(tile => tile.drawMiddle(isEnemyTurn)));
-        this.boardTiles.forEach(tileRow => tileRow.forEach(tile => tile.drawFront()));
+        for (let y = 0; y < this.boardTiles.length; y++) {
+            for (let x = 0; x < this.boardTiles[0].length; x++) {
+                this.boardTiles[y][x].drawBack();
+                this.boardTiles[y][x].drawMiddle(isEnemyTurn);
+            }
+        }
     }
 
     dragElement(board) {

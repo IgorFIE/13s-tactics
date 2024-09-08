@@ -73,18 +73,20 @@ export class Game {
     }
 
     enemyTurn() {
-        if (this.resetEnemyMovement) this.fetchNewEnemyMovement();
+        if (this.resetEnemyMovement && !this.ui.isDisplayingModal) this.fetchNewEnemyMovement();
     }
 
     fetchNewEnemyMovement() {
         let bestCharIndex = -1;
+        let bestPathIndex = -1;
         let bestPath = 999;
         const possiblePaths = this.enemyCharacters.map((enemyChar, charIndex) => {
             return this.playerCharacters.map((playerChar, index) => {
                 const result = this.aStarAlgorithm.aStarPath(enemyChar, playerChar, this.board.boardTiles);
                 if (result.length > 1 && result.length < bestPath) {
                     bestCharIndex = charIndex;
-                    bestPath = index;
+                    bestPathIndex = index;
+                    bestPath = result.length;
                 }
                 return result;
             });
@@ -94,7 +96,7 @@ export class Game {
             this.board.selectedCharacter = this.enemyCharacters[bestCharIndex];
             this.board.select(true);
 
-            this.path = possiblePaths[bestCharIndex][bestPath];
+            this.path = possiblePaths[bestCharIndex][bestPathIndex];
             this.pathIndex = 1; // ignore first position since it's the origin
             this.resetEnemyMovement = false;
             this.movementAi();

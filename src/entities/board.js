@@ -246,6 +246,7 @@ export class Board {
 
         board.boardCanvas.onmousedown = dragMouseDown;
         board.boardCanvas.ontouchstart = dragMouseDown;
+        board.boardCanvas.onmouseout = closeDragElem;
 
         function dragMouseDown(e) {
             e = e || window.event;

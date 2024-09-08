@@ -10,6 +10,7 @@ export class Game {
     }
 
     init(levelIndex) {
+        GameVars.boardPixelSize = GameVars.pixelSize;
         this.levelIndex = levelIndex;
         this.gameDiv.innerHTML = "";
         this.level = Levels[levelIndex];

@@ -53,7 +53,6 @@ export class UI {
     }
 
     drawTimer() {
-        this.timerCtx.clearRect(0, 0, this.timer.width, this.timer.height);
         genSmallBox(this.timer, 0, 0, 78, 33, toPixelSize(1), "#3e3846", "#1b1116");
         if (this.game.isGamePause) {
             drawPixelTextInCanvas("BREAKTIME", this.timer, toPixelSize(1), 40, 8, "#00bcd4", 1);

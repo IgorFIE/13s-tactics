@@ -55,8 +55,13 @@ export class Game {
     update() {
         this.changeLevel();
         this.ui?.update(this.board.selectedCharacter);
-        if (this.isGamePause) return;
-        if (this.isEnemyTurn) this.enemyTurn();
+        if (this.isGamePause && this.aiInterval) {
+            this.resetEnemyMovement = true;
+            clearInterval(this.aiInterval);
+            this.aiInterval = null;
+            this.click(0, 0);
+        }
+        else if (this.isEnemyTurn) this.enemyTurn();
     }
 
     changeLevel() {
@@ -100,21 +105,17 @@ export class Game {
             this.path = possiblePaths[bestCharIndex][bestPathIndex];
             this.pathIndex = 1; // ignore first position since it's the origin
             this.resetEnemyMovement = false;
-            this.movementAi();
+            this.aiInterval = setInterval(() => {
+                if (this.pathIndex < this.path.length) {
+                    this.board.moveCharacter(this.board.boardTiles[this.path[this.pathIndex].y][this.path[this.pathIndex].x], true);
+                    this.cleanCharacters();
+                    this.pathIndex++;
+                } else {
+                    this.resetEnemyMovement = true;
+                    clearInterval(this.aiInterval);
+                }
+            }, 750);
         }
-    }
-
-    movementAi() {
-        setTimeout(() => {
-            if (this.pathIndex < this.path.length) {
-                this.board.moveCharacter(this.board.boardTiles[this.path[this.pathIndex].y][this.path[this.pathIndex].x], true);
-                this.cleanCharacters();
-                this.pathIndex++;
-                this.movementAi();
-            } else {
-                this.resetEnemyMovement = true;
-            }
-        }, 750);
     }
 
     cleanCharacters() {

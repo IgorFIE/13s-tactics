@@ -48,8 +48,6 @@ export class Board {
     }
 
     drawGameBoardShadow() {
-        this.boardShadowCtx.clearRect(0, 0, this.boardShadowCanvas.width, this.boardShadowCanvas.height);
-
         const width = toBoardPixelSize(GameVars.tileXRatio * GameVars.gameBoardSize * 2 + 1);
         const height = toBoardPixelSize(GameVars.tileYRatio * GameVars.gameBoardSize * 2 + 1 + GameVars.tileDepth);
         setElemSize(this.boardShadowCanvas, width, height);
@@ -65,7 +63,6 @@ export class Board {
     }
 
     setGameBoardCanvas() {
-        this.boardCtx.clearRect(0, 0, this.boardCanvas.width, this.boardCanvas.height);
         setElemSize(this.boardCanvas,
             toBoardPixelSize(GameVars.tileXRatio * GameVars.gameBoardSize * 2 + 1),
             toBoardPixelSize(GameVars.tileYRatio * GameVars.gameBoardSize * 2 + 1 + GameVars.tileDepth)

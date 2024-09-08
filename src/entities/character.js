@@ -12,27 +12,23 @@ export class Character {
         this.characterType = characterType;
         this.direction = direction;
         this.isPlayer = isPlayer;
+        this.colors = this.getCharacterColors();
+        this.spriteToDraw = this.getCharacterTypeSprite();
+        this.invertX = this.shouldInverX();
     }
 
     updatePos(x, y, direction) {
         this.x = x;
         this.y = y;
         this.direction = direction >= 0 ? direction : this.direction;
+        this.spriteToDraw = this.getCharacterTypeSprite();
+        this.invertX = this.shouldInverX();
     }
 
     draw(tileX, tileY, ctx) {
         const spritePos = GameVars.characterPos[this.characterType][this.direction];
         genSmallBox(ctx.canvas, tileX + (GameVars.tileXRatio / 2), tileY + (GameVars.tileYRatio / 2), GameVars.tileXRatio, GameVars.tileYRatio, toBoardPixelSize(1), "#00000033", "#00000033");
-        switch (this.direction) {
-            case DirectionType.UP:
-            case DirectionType.LEFT:
-                drawSprite(ctx, this.getCharacterTypeSprite(), toBoardPixelSize(1), tileX + spritePos.x, tileY + spritePos.y, this.getCharacterColors(), this.direction == DirectionType.LEFT);
-                break;
-            case DirectionType.DOWN:
-            case DirectionType.RIGHT:
-                drawSprite(ctx, this.getCharacterTypeSprite(), toBoardPixelSize(1), tileX + spritePos.x, tileY + spritePos.y, this.getCharacterColors(), this.direction == DirectionType.DOWN);
-                break;
-        }
+        drawSprite(ctx, this.spriteToDraw, toBoardPixelSize(1), tileX + spritePos.x, tileY + spritePos.y, this.colors, this.invertX);
     }
 
     getCharacterTypeSprite() {
@@ -49,5 +45,16 @@ export class Character {
 
     getCharacterColors() {
         return this.isPlayer ? PlayerSwatColors : EnemySwatColors;
+    }
+
+    shouldInverX() {
+        switch (this.direction) {
+            case DirectionType.UP:
+            case DirectionType.LEFT:
+                return this.direction == DirectionType.LEFT;
+            case DirectionType.DOWN:
+            case DirectionType.RIGHT:
+                return this.direction == DirectionType.DOWN;
+        }
     }
 }

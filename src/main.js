@@ -93,7 +93,7 @@ const drawCharacter = (ctx, pixelSize, x, y, sprite, colors, isInvert) => {
 
 const createSoundBtn = () => {
     soundBtnCanv = createElem(mainDiv, "canvas", "soundbtn", null, toPixelSize(18), toPixelSize(18), GameVars.isMobile, null, () => {
-        initAudio()
+        initAudio();
         GameVars.sound?.muteMusic();
     });
     soundBtnCtx = soundBtnCanv.getContext("2d");
@@ -104,7 +104,6 @@ const drawSoundBtn = () => {
     let isSoundOn = GameVars.sound && GameVars.sound.isSoundOn;
     if (lastSoundState !== isSoundOn) {
         lastSoundState = isSoundOn;
-        soundBtnCtx.clearRect(0, 0, soundBtnCanv.width, soundBtnCanv.height);
         genSmallBox(soundBtnCanv, 0, 0, 17, 17, toPixelSize(1), isSoundOn ? "#9bf2fa" : "#9bf2fa", isSoundOn ? "#9bf2fa66" : "#1b1116");
         drawSprite(soundBtnCtx, SpeakerSprite, toPixelSize(1), 4, 6);
         isSoundOn && drawSprite(soundBtnCtx, AudioSprite, toPixelSize(1), 10, 4);
@@ -126,12 +125,10 @@ const createMainBtnStartBtn = () => {
 }
 
 const initHandlers = () => {
-    window.addEventListener("click", (e) => initAudio());
+    gameBoardDiv.onmousemove = (event) => game.mov(event.pageX, event.pageY);
+    gameBoardDiv.onmousedown = (e) => !game.isEnemyTurn && game.click(e.clientX, e.clientY);
 
-    gameBoardDiv.onmousemove = (event) => { game.mov(event.pageX, event.pageY) };
-    gameBoardDiv.onmousedown = (e) => { !game.isEnemyTurn && game.click(e.clientX, e.clientY) };
-
-    gameBoardDiv.ontouchstart = (e) => { !game.isEnemyTurn && game.click(e.touches[0].clientX, e.touches[0].clientY) };
+    gameBoardDiv.ontouchstart = (e) => !game.isEnemyTurn && game.click(e.touches[0].clientX, e.touches[0].clientY);
 }
 
 const initAudio = () => {
@@ -146,7 +143,7 @@ const gameLoop = () => {
     game.draw();
 
     drawSoundBtn();
-    // GameVars.sound?.playMusic();
+    GameVars.sound?.playMusic();
     window.requestAnimationFrame(() => gameLoop());
 }
 

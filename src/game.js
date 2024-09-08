@@ -11,7 +11,7 @@ export class Game {
 
     init(levelIndex) {
         this.levelIndex = levelIndex;
-        this.gameDiv.innerHtml = "";
+        this.gameDiv.innerHTML = "";
         this.level = Levels[levelIndex];
         this.board = new Board(this.gameDiv, this.level.boardWalls);
         this.playerCharacters = this.createCharacters(this.level.playerCharacters, true);

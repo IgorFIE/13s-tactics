@@ -142,13 +142,14 @@ export class UI {
         this.endModalBtn = createElem(this.endModalDiv, "canvas", null, null, toPixelSize(48), toPixelSize(20), GameVars.isMobile, "#00000066", () => {
             GameVars.sound.clickSound();
             if (this.game.enemyCharacters.length == 0) {
-                this.game.isChangeLevel = true;
+                if (this.game.levelIndex + 1 >= Levels.length) {
+                    this.game.isGameCompleted = true;
+                } else {
+                    this.game.isChangeLevel = true;
+                }
             }
-            if (this.game.playerCharacters.length == 0) {
+            else if (this.game.playerCharacters.length == 0) {
                 this.game.isRetryLevel = true;
-            }
-            if (this.game.levelIndex + 1 >= Levels.length) {
-                this.game.isGameCompleted = true;
             }
         });
         this.endModalBtn.style.translate = ((GameVars.gameW / 2) - (this.endModalBtn.width / 2)) + 'px ' + ((GameVars.gameH / 2) + 12) + 'px';

@@ -1,20 +1,11 @@
 export class Sound {
     constructor() {
         const AudioContext = window.AudioContext || window.webkitAudioContext;
-        this.context = new AudioContext();
-
-        this.loopTime = 0.016;
-        this.loopMaxTime = 4;
-        this.notesPeerLoop = 32;
-        this.currentTime = this.loopMaxTime / this.notesPeerLoop;
-
-        this.musicBassNote = 0;
-        this.musicBass2Note = 0;
-        this.musicElectricNote = 0;
-        this.musicRythmNote = 0;
-
+        this.ctx = new AudioContext();
         this.isSoundOn = true;
         this.isSoundInitialized = false;
+
+        this.noteCount = [0, 0];
     }
 
     muteMusic() {
@@ -23,7 +14,8 @@ export class Sound {
 
     initSound() {
         this.isSoundInitialized = true;
-        this.context.resume();
+        this.ctx.resume();
+        this.musicInternval = setInterval(() => this.playMusic(), 60000 / 240);
     }
 
     clickSound() {
@@ -51,48 +43,37 @@ export class Sound {
         this.playSound("square", 16.35, 0.3, 0.2, 0.1);
     }
 
-    playMusic() {
-        if (this.isSoundOn && this.isSoundInitialized) {
-            if (this.currentTime >= (this.loopMaxTime / this.notesPeerLoop)) {
-
-                this.playSound("sine", mB[this.musicBassNote], 0.5, 0, 0.8);
-                this.musicBassNote++;
-                this.musicBassNote >= mB.length && (this.musicBassNote = 0);
-
-                this.playSound("square", mM[this.musicElectricNote], 0.04, 0.1, 0.8);
-                this.musicElectricNote++;
-                this.musicElectricNote >= mM.length && (this.musicElectricNote = 0);
-
-                this.playSound("sine", mB[this.musicBass2Note], 0.5, 0.3, 0.8);
-                this.musicBass2Note++;
-                this.musicBass2Note >= mB.length && (this.musicBass2Note = 0);
-
-                this.playSound("square", mR[this.musicRythmNote], 0.02, 0, 0.8);
-                this.musicRythmNote++;
-                this.musicRythmNote >= mR.length && (this.musicRythmNote = 0);
-
-                this.currentTime = 0;
-            } else {
-                this.currentTime = this.currentTime + this.loopTime;
-            }
-        }
-    }
-
     playSound(type, value, volume, start, end) {
         if (this.isSoundOn && this.isSoundInitialized) {
-            const o = this.context.createOscillator();
-            const g = this.context.createGain();
+            const o = this.ctx.createOscillator();
+            const g = this.ctx.createGain();
+
             o.type = type;
             o.frequency.value = value;
 
-            g.gain.setValueAtTime(volume, this.context.currentTime);
-            g.gain.linearRampToValueAtTime(0.0001, this.context.currentTime + end);
+            g.gain.setValueAtTime(volume, this.ctx.currentTime + start);
+            g.gain.linearRampToValueAtTime(0.0001, this.ctx.currentTime + start + end);
 
             o.connect(g);
-            g.connect(this.context.destination);
-            o.start(start);
-            o.stop(this.context.currentTime + end);
+            g.connect(this.ctx.destination);
+            o.start(this.ctx.currentTime + start);
+            o.stop(this.ctx.currentTime + start + end);
         }
+    }
+
+    playMusic() {
+        if (this.isSoundOn && this.isSoundInitialized) {
+            this.playSound("Sine", mB[this.noteCount[0]], 1, 0, 0.8);
+            this.updateNoteCount(0, mB);
+
+            this.playSound("square", mR[this.noteCount[1]], 0.02, 0, 0.8);
+            this.updateNoteCount(1, mR);
+        }
+    }
+
+    updateNoteCount(pos, melodyArray) {
+        this.noteCount[pos]++;
+        if (this.noteCount[pos] >= melodyArray.length) this.noteCount[pos] = 0;
     }
 }
 
@@ -103,16 +84,4 @@ const mB = [
     61.74, null, null, null, null, null, null, null
 ];
 
-const mM = [
-    null, null, null, null, 123.47, null, null, null,
-    null, null, null, null, null, null, null, null,
-    null, null, null, null, null, null, null, null,
-    null, null, null, null, null, null, null, null,
-];
-
-const mR = [
-    61.74, null, 123.47, null, 61.74, null, 123.47, null,
-    61.74, null, 123.47, null, 61.74, null, 123.47, null,
-    61.74, null, 123.47, null, 61.74, null, 123.47, null,
-    61.74, null, 123.47, null, 61.74, null, 123.47, null,
-];
+const mR = [61.74, null, 123.47, null];

@@ -141,9 +141,7 @@ const initAudio = () => {
 const gameLoop = () => {
     game.update();
     game.draw();
-
     drawSoundBtn();
-    GameVars.sound?.playMusic();
     window.requestAnimationFrame(() => gameLoop());
 }
 

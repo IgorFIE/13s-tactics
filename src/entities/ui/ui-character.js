@@ -33,15 +33,6 @@ export class UiCharacter {
         genSmallBox(this.canvas, 2, 2, 25, 27, toPixelSize(1), "#3e3846", "#1b1116");
         if (this.isCharacterSelected) genSmallBox(this.canvas, 0, 0, 29, 31, toPixelSize(1), "#ffff57");
 
-        const spritePos = GameVars.characterPos[this.character.characterType][DirectionType.RIGHT];
-        drawSprite(this.ctx, this.getCharacterTypeSprite(), toPixelSize(1), spritePos.x, spritePos.y + 11, PlayerSwatColors);
-    }
-
-    getCharacterTypeSprite() {
-        switch (this.character.characterType) {
-            case CharacterType.SHIELD: return ShieldSwatBottom;
-            case CharacterType.MELEE: return MeleeSwatBottom;
-            case CharacterType.RANGE: return RangeSwatBottom;
-        }
+        drawSprite(this.ctx, this.character.spriteToDraw, toPixelSize(1), this.character.spritePos.x + 1, this.character.spritePos.y + 11, this.character.colors, this.character.invertX);
     }
 }

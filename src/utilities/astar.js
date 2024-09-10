@@ -45,23 +45,23 @@ export class aStar {
                 case CharacterType.SHIELD:
                     for (let y = -1; y <= 1; y++) {
                         for (let x = -1; x <= 1; x++) {
-                            this.addAdjacentNodesToOpenList(s.x + x, s.y + y, s.g + 1, s, target, board, (tile) => this.normalCharacterValidation(s, tile));
+                            this.addAdjacentNodesToOpenList(s.x + x, s.y + y, s.g + 1, s, target, board, (tile) => this.movementValidation(s, tile));
                         }
                     }
                     break;
 
                 case CharacterType.MELEE:
-                    this.addAdjacentNodesToOpenList(s.x + 1, s.y, s.g + 1, s, target, board, (tile) => this.meleeCharacterValidation(s, tile));
-                    this.addAdjacentNodesToOpenList(s.x - 1, s.y, s.g + 1, s, target, board, (tile) => this.meleeCharacterValidation(s, tile));
-                    this.addAdjacentNodesToOpenList(s.x, s.y + 1, s.g + 1, s, target, board, (tile) => this.meleeCharacterValidation(s, tile));
-                    this.addAdjacentNodesToOpenList(s.x, s.y - 1, s.g + 1, s, target, board, (tile) => this.meleeCharacterValidation(s, tile));
+                    this.addAdjacentNodesToOpenList(s.x + 1, s.y, s.g + 1, s, target, board, (tile) => this.movementValidation(s, tile));
+                    this.addAdjacentNodesToOpenList(s.x - 1, s.y, s.g + 1, s, target, board, (tile) => this.movementValidation(s, tile));
+                    this.addAdjacentNodesToOpenList(s.x, s.y + 1, s.g + 1, s, target, board, (tile) => this.movementValidation(s, tile));
+                    this.addAdjacentNodesToOpenList(s.x, s.y - 1, s.g + 1, s, target, board, (tile) => this.movementValidation(s, tile));
                     break;
 
                 case CharacterType.RANGE:
-                    this.addAdjacentNodesToOpenList(s.x + 1, s.y + 1, s.g + 1, s, target, board, (tile) => this.normalCharacterValidation(s, tile));
-                    this.addAdjacentNodesToOpenList(s.x - 1, s.y - 1, s.g + 1, s, target, board, (tile) => this.normalCharacterValidation(s, tile));
-                    this.addAdjacentNodesToOpenList(s.x + 1, s.y - 1, s.g + 1, s, target, board, (tile) => this.normalCharacterValidation(s, tile));
-                    this.addAdjacentNodesToOpenList(s.x - 1, s.y + 1, s.g + 1, s, target, board, (tile) => this.normalCharacterValidation(s, tile));
+                    this.addAdjacentNodesToOpenList(s.x + 1, s.y + 1, s.g + 1, s, target, board, (tile) => this.movementValidation(s, tile));
+                    this.addAdjacentNodesToOpenList(s.x - 1, s.y - 1, s.g + 1, s, target, board, (tile) => this.movementValidation(s, tile));
+                    this.addAdjacentNodesToOpenList(s.x + 1, s.y - 1, s.g + 1, s, target, board, (tile) => this.movementValidation(s, tile));
+                    this.addAdjacentNodesToOpenList(s.x - 1, s.y + 1, s.g + 1, s, target, board, (tile) => this.movementValidation(s, tile));
                     break;
             }
 
@@ -73,17 +73,13 @@ export class aStar {
         return [];
     };
 
-    normalCharacterValidation(s, tile) {
+    movementValidation(s, tile) {
         return (tile.tileType == TileType.FLOOR && !tile.character) ||
             (tile.tileType == TileType.FLOOR && tile.character && tile.character.isPlayer && !this.validateShieldCollision(s.x, s.y, tile.character));
     }
 
-    // melee ignores walls
-    meleeCharacterValidation(s, tile) {
-        return !(tile.character && tile.character.isPlayer && this.validateShieldCollision(s.x, s.y, tile.character));
-    }
-
     validateShieldCollision(x, y, enemy) {
+        if (enemy.characterType !== CharacterType.SHIELD) return false;
         switch (enemy.direction) {
             case DirectionType.UP: return y < enemy.y;
             case DirectionType.DOWN: return y > enemy.y;

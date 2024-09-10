@@ -183,7 +183,7 @@ export class Board {
 
     validateCollision(x, y, xValue, yValue, directionType, characterType, isEnemyMov) {
         const tile = this.boardTiles[y + yValue][x + xValue];
-        if (tile.tileType === TileType.WALL && characterType !== CharacterType.MELEE) return true;
+        if (tile.tileType === TileType.WALL) return true;
 
         if (isEnemyMov) {
             if (tile.character && !tile.character.isPlayer) return true;

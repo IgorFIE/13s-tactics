@@ -15,6 +15,7 @@ export class Character {
         this.colors = this.getCharacterColors();
         this.spriteToDraw = this.getCharacterTypeSprite();
         this.invertX = this.shouldInverX();
+        this.spritePos = GameVars.characterPos[this.characterType][this.direction];
     }
 
     updatePos(x, y, direction) {
@@ -23,12 +24,12 @@ export class Character {
         this.direction = direction >= 0 ? direction : this.direction;
         this.spriteToDraw = this.getCharacterTypeSprite();
         this.invertX = this.shouldInverX();
+        this.spritePos = GameVars.characterPos[this.characterType][this.direction];
     }
 
     draw(tileX, tileY, ctx) {
-        const spritePos = GameVars.characterPos[this.characterType][this.direction];
         genSmallBox(ctx.canvas, tileX + (GameVars.tileXRatio / 2), tileY + (GameVars.tileYRatio / 2), GameVars.tileXRatio, GameVars.tileYRatio, toBoardPixelSize(1), "#00000033", "#00000033");
-        drawSprite(ctx, this.spriteToDraw, toBoardPixelSize(1), tileX + spritePos.x, tileY + spritePos.y, this.colors, this.invertX);
+        drawSprite(ctx, this.spriteToDraw, toBoardPixelSize(1), tileX + this.spritePos.x, tileY + this.spritePos.y, this.colors, this.invertX);
     }
 
     getCharacterTypeSprite() {

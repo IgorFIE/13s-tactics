@@ -83,6 +83,7 @@ export class Game {
     }
 
     fetchNewEnemyMovement() {
+        this.click(0, 0);
         let bestCharIndex = -1;
         let bestPathIndex = -1;
         let bestPath = 999;
@@ -98,7 +99,6 @@ export class Game {
             });
         });
         if (bestCharIndex != -1) {
-            this.click(0, 0);
             this.board.selectedCharacter = this.enemyCharacters[bestCharIndex];
             this.board.select(true);
 

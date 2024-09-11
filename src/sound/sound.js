@@ -63,10 +63,10 @@ export class Sound {
 
     playMusic() {
         if (this.isSoundOn && this.isSoundInitialized && this.ctx.state == "running") {
-            this.playSound("Sine", mB[this.noteCount[0]], 0.8, 0, 0.8);
+            this.playSound("sine", mB[this.noteCount[0]], 0.8, 0, 0.8);
             this.updateNoteCount(0, mB);
 
-            this.playSound("square", mR[this.noteCount[1]], 0.015, 0, 0.8);
+            this.playSound("square", mR[this.noteCount[1]], 0.02, 0, 0.8);
             this.updateNoteCount(1, mR);
         }
     }
@@ -80,17 +80,29 @@ export class Sound {
 const mB = [
     61.74, null, 61.74, null, null, null, null, null,
     61.74, null, null, null, null, null, null, null,
-    61.74, null, null, null, null, null, null, null,
-    61.74, null, null, null, null, null, null, null
 ];
 
 const mR = [
+    null, null, null, null, 123.47, null, null, null,
+    null, null, null, null, null, null, null, null,
+    null, null, null, null, 123.47, null, null, null,
+    null, null, null, null, null, null, null, null,
+    61.74, null, null, null, 61.74, null, null, null,
+    61.74, null, null, null, 61.74, null, 123.47, null,
     61.74, null, 123.47, null, 61.74, null, 123.47, null,
     61.74, null, 123.47, null, 61.74, null, 123.47, null,
     110, null, 98, null, 110, null, 123.47, null,
     110, null, 98, null, 110, null, 123.47, 98,
+    null, null, null, null, null, null, null, null,
+    null, null, null, null, null, null, null, null,
+    null, null, null, null, 123.47, null, null, null,
+    null, null, null, null, null, null, null, null,
+    61.74, null, null, null, 61.74, null, null, null,
+    61.74, null, null, null, 61.74, null, 123.47, null,
     61.74, null, 123.47, null, 61.74, null, 123.47, null,
     61.74, null, 123.47, null, 61.74, null, 123.47, null,
     110, null, 98, null, 110, null, 123.47, null,
     110, null, 98, null, 110, null, 246.94, 123.47,
+    61.74, null, null, null, 61.74, null, null, null,
+    61.74, null, null, null, 61.74, null, null, null,
 ];

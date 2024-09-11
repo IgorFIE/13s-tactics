@@ -138,42 +138,4 @@ export const Levels = [
             [CharacterType.RANGE, new Point(7, 1), DirectionType.DOWN],
         ]
     ),
-    // new Level(
-    //     [
-    //         new Point(2, 0), new Point(2, 1), new Point(2, 2), new Point(2, 3), new Point(2, 4),
-    //         new Point(2, 5), new Point(2, 6), new Point(2, 7), new Point(2, 8),
-    //         new Point(6, 0), new Point(6, 1), new Point(6, 2), new Point(6, 3), new Point(6, 4),
-    //         new Point(6, 5), new Point(6, 6), new Point(6, 7), new Point(6, 8)
-    //     ],
-    //     [
-    //         [CharacterType.SHIELD, new Point(3, 5), DirectionType.UP],
-    //         [CharacterType.SHIELD, new Point(4, 5), DirectionType.UP],
-    //         [CharacterType.SHIELD, new Point(5, 5), DirectionType.UP],
-
-    //         [CharacterType.MELEE, new Point(3, 6), DirectionType.UP],
-    //         [CharacterType.MELEE, new Point(5, 6), DirectionType.UP],
-
-    //         [CharacterType.MELEE, new Point(3, 7), DirectionType.UP],
-    //         [CharacterType.MELEE, new Point(4, 7), DirectionType.UP],
-    //         [CharacterType.RANGE, new Point(5, 7), DirectionType.UP],
-
-    //         [CharacterType.RANGE, new Point(3, 8), DirectionType.UP],
-    //         [CharacterType.RANGE, new Point(5, 8), DirectionType.UP],
-    //     ],
-    //     [
-    //         [CharacterType.SHIELD, new Point(3, 3), DirectionType.DOWN],
-    //         [CharacterType.SHIELD, new Point(4, 3), DirectionType.DOWN],
-    //         [CharacterType.SHIELD, new Point(5, 3), DirectionType.DOWN],
-
-    //         [CharacterType.RANGE, new Point(3, 2), DirectionType.DOWN],
-    //         [CharacterType.RANGE, new Point(5, 2), DirectionType.DOWN],
-
-    //         [CharacterType.RANGE, new Point(3, 1), DirectionType.DOWN],
-    //         [CharacterType.MELEE, new Point(4, 1), DirectionType.DOWN],
-    //         [CharacterType.RANGE, new Point(5, 1), DirectionType.DOWN],
-
-    //         [CharacterType.RANGE, new Point(3, 0), DirectionType.DOWN],
-    //         [CharacterType.RANGE, new Point(5, 0), DirectionType.DOWN],
-    //     ]
-    // ),
 ];

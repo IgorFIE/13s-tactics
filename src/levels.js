@@ -138,4 +138,26 @@ export const Levels = [
             [CharacterType.RANGE, new Point(7, 1), DirectionType.DOWN],
         ]
     ),
+    // new Level(
+    //     [
+    //         new Point(0, 0), new Point(3, 0), new Point(4, 0),
+    //         new Point(2, 1), new Point(6, 1), new Point(7, 1), new Point(8, 1),
+    //         new Point(4, 2), new Point(5, 2),
+    //         new Point(1, 3), new Point(2, 3), new Point(7, 3),
+    //         new Point(3, 4), new Point(5, 4), new Point(7, 4),
+    //         new Point(0, 5), new Point(1, 5), new Point(6, 5),
+    //         new Point(3, 6), new Point(5, 6),
+    //         new Point(1, 7), new Point(2, 7), new Point(4, 7), new Point(7, 7), new Point(8, 7),
+    //         new Point(4, 8),
+    //     ],
+    //     [
+    //         [CharacterType.RANGE, new Point(8, 5), DirectionType.UP],
+    //         [CharacterType.MELEE, new Point(7, 5), DirectionType.RIGHT],
+    //     ],
+    //     [
+    //         [CharacterType.RANGE, new Point(7, 8), DirectionType.LEFT],
+    //         [CharacterType.SHIELD, new Point(5, 5), DirectionType.LEFT],
+    //         [CharacterType.SHIELD, new Point(3, 7), DirectionType.DOWN],
+    //     ]
+    // ),
 ];

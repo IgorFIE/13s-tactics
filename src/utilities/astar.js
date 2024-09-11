@@ -5,7 +5,7 @@ import { GameVars } from "../game-variables";
 
 class AStarNode {
     constructor(x, y, g = 0, h = 0, parent = null) {
-        this.id = this.createNumericIdentifier(x, y);
+        this.id = createNumericIdentifier(x, y);
         this.x = x;
         this.y = y;
         this.f = g + h;
@@ -13,11 +13,11 @@ class AStarNode {
         this.h = h;
         this.parent = parent;
     }
-
-    createNumericIdentifier(x, y) {
-        return y + (x / Math.pow(10, x.toString().length));
-    }
 }
+
+const createNumericIdentifier = (x, y) => {
+    return y + (x / Math.pow(10, x.toString().length));
+};
 
 export class aStar {
     aStarPath(character, targetPoint, board) {
@@ -43,11 +43,19 @@ export class aStar {
 
             switch (character.characterType) {
                 case CharacterType.SHIELD:
-                    for (let y = -1; y <= 1; y++) {
-                        for (let x = -1; x <= 1; x++) {
-                            this.addAdjacentNodesToOpenList(s.x + x, s.y + y, s.g + 1, s, target, board, (tile) => this.movementValidation(s, tile));
-                        }
-                    }
+                    this.addAdjacentNodesToOpenList(s.x + 1, s.y, s.g + 1, s, target, board, (tile) => this.movementValidation(s, tile));
+                    this.addAdjacentNodesToOpenList(s.x - 1, s.y, s.g + 1, s, target, board, (tile) => this.movementValidation(s, tile));
+                    this.addAdjacentNodesToOpenList(s.x, s.y + 1, s.g + 1, s, target, board, (tile) => this.movementValidation(s, tile));
+                    this.addAdjacentNodesToOpenList(s.x, s.y - 1, s.g + 1, s, target, board, (tile) => this.movementValidation(s, tile));
+
+                    if (this.openList[createNumericIdentifier(s.x + 1, s.y)] && this.openList[createNumericIdentifier(s.x, s.y + 1)])
+                        this.addAdjacentNodesToOpenList(s.x + 1, s.y + 1, s.g + 1, s, target, board, (tile) => this.movementValidation(s, tile));
+                    if (this.openList[createNumericIdentifier(s.x - 1, s.y)] && this.openList[createNumericIdentifier(s.x, s.y - 1)])
+                        this.addAdjacentNodesToOpenList(s.x - 1, s.y - 1, s.g + 1, s, target, board, (tile) => this.movementValidation(s, tile));
+                    if (this.openList[createNumericIdentifier(s.x + 1, s.y)] && this.openList[createNumericIdentifier(s.x, s.y - 1)])
+                        this.addAdjacentNodesToOpenList(s.x + 1, s.y - 1, s.g + 1, s, target, board, (tile) => this.movementValidation(s, tile));
+                    if (this.openList[createNumericIdentifier(s.x - 1, s.y)] && this.openList[createNumericIdentifier(s.x, s.y + 1)])
+                        this.addAdjacentNodesToOpenList(s.x - 1, s.y + 1, s.g + 1, s, target, board, (tile) => this.movementValidation(s, tile));
                     break;
 
                 case CharacterType.RANGE:

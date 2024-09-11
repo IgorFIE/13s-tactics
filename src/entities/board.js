@@ -161,16 +161,33 @@ export class Board {
             const dist = GameVars.characterStatus[this.selectedCharacter.characterType].dist;
             const movType = GameVars.characterStatus[this.selectedCharacter.characterType].movType;
             if (movType === MovType.DIRECTIONAL || movType === MovType.BOTH) {
-                this.loopDirection(dist, (i) => y - i >= 0 && this.validateCollision(x, y, 0, - i, DirectionType.UP, characterType, isEnemyMov));
-                this.loopDirection(dist, (i) => y + i < GameVars.gameBoardSize && this.validateCollision(x, y, 0, i, DirectionType.DOWN, characterType, isEnemyMov));
-                this.loopDirection(dist, (i) => x - i >= 0 && this.validateCollision(x, y, - i, 0, DirectionType.LEFT, characterType, isEnemyMov));
-                this.loopDirection(dist, (i) => x + i < GameVars.gameBoardSize && this.validateCollision(x, y, i, 0, DirectionType.RIGHT, characterType, isEnemyMov));
+                this.loopDirection(dist, (i) => y - i >= 0 && this.validateCollision(x, y, 0, - i, DirectionType.UP, isEnemyMov));
+                this.loopDirection(dist, (i) => y + i < GameVars.gameBoardSize && this.validateCollision(x, y, 0, i, DirectionType.DOWN, isEnemyMov));
+                this.loopDirection(dist, (i) => x - i >= 0 && this.validateCollision(x, y, - i, 0, DirectionType.LEFT, isEnemyMov));
+                this.loopDirection(dist, (i) => x + i < GameVars.gameBoardSize && this.validateCollision(x, y, i, 0, DirectionType.RIGHT, isEnemyMov));
             }
-            if (movType === MovType.DIAGONAL || movType === MovType.BOTH) {
-                this.loopDirection(dist, (i) => y - i >= 0 && x - i >= 0 && this.validateCollision(x, y, - i, - i, DirectionType.UP, characterType, isEnemyMov));
-                this.loopDirection(dist, (i) => y + i < GameVars.gameBoardSize && x + i < GameVars.gameBoardSize && this.validateCollision(x, y, i, i, DirectionType.DOWN, characterType, isEnemyMov));
-                this.loopDirection(dist, (i) => x - i >= 0 && y + i < GameVars.gameBoardSize && this.validateCollision(x, y, - i, i, DirectionType.LEFT, characterType, isEnemyMov));
-                this.loopDirection(dist, (i) => y - i >= 0 && x + i < GameVars.gameBoardSize && this.validateCollision(x, y, i, - i, DirectionType.RIGHT, characterType, isEnemyMov));
+            if (movType === MovType.DIAGONAL) {
+                this.loopDirection(dist, (i) => y - i >= 0 && x - i >= 0 && this.validateCollision(x, y, - i, - i, DirectionType.UP, isEnemyMov));
+                this.loopDirection(dist, (i) => y + i < GameVars.gameBoardSize && x + i < GameVars.gameBoardSize && this.validateCollision(x, y, i, i, DirectionType.DOWN, isEnemyMov));
+                this.loopDirection(dist, (i) => x - i >= 0 && y + i < GameVars.gameBoardSize && this.validateCollision(x, y, - i, i, DirectionType.LEFT, isEnemyMov));
+                this.loopDirection(dist, (i) => y - i >= 0 && x + i < GameVars.gameBoardSize && this.validateCollision(x, y, i, - i, DirectionType.RIGHT, isEnemyMov));
+            }
+            if (movType === MovType.BOTH) {
+                this.loopDirection(dist, (i) => y - i >= 0 && x - i >= 0 &&
+                    this.boardTiles[y - i][x].isSelected && this.boardTiles[y][x - i].isSelected &&
+                    this.validateCollision(x, y, - i, - i, DirectionType.UP, isEnemyMov));
+
+                this.loopDirection(dist, (i) => y + i < GameVars.gameBoardSize && x + i < GameVars.gameBoardSize &&
+                    this.boardTiles[y + i][x].isSelected && this.boardTiles[y][x + i].isSelected &&
+                    this.validateCollision(x, y, i, i, DirectionType.DOWN, isEnemyMov));
+
+                this.loopDirection(dist, (i) => x - i >= 0 && y + i < GameVars.gameBoardSize &&
+                    this.boardTiles[y + i][x].isSelected && this.boardTiles[y][x - i].isSelected &&
+                    this.validateCollision(x, y, - i, i, DirectionType.LEFT, isEnemyMov));
+
+                this.loopDirection(dist, (i) => y - i >= 0 && x + i < GameVars.gameBoardSize &&
+                    this.boardTiles[y - i][x].isSelected && this.boardTiles[y][x + i].isSelected &&
+                    this.validateCollision(x, y, i, - i, DirectionType.RIGHT, isEnemyMov));
             }
         }
     }
@@ -181,7 +198,7 @@ export class Board {
         }
     }
 
-    validateCollision(x, y, xValue, yValue, directionType, characterType, isEnemyMov) {
+    validateCollision(x, y, xValue, yValue, directionType, isEnemyMov) {
         const tile = this.boardTiles[y + yValue][x + xValue];
         if (tile.tileType === TileType.WALL) return true;
 

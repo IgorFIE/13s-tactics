@@ -14,12 +14,12 @@ export const Levels = [
         ]
     ),
     new Level(
-        [new Point(3, 4), new Point(5, 4)],
+        [new Point(3, 3), new Point(5, 3)],
         [
             [CharacterType.RANGE, new Point(4, 6), DirectionType.UP],
         ],
         [
-            [CharacterType.SHIELD, new Point(4, 4), DirectionType.DOWN],
+            [CharacterType.SHIELD, new Point(4, 3), DirectionType.DOWN],
         ]
     ),
     new Level(

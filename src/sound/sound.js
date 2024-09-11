@@ -63,10 +63,10 @@ export class Sound {
 
     playMusic() {
         if (this.isSoundOn && this.isSoundInitialized && this.ctx.state == "running") {
-            this.playSound("Sine", mB[this.noteCount[0]], 0.5, 0, 0.8);
+            this.playSound("Sine", mB[this.noteCount[0]], 1, 0, 0.8);
             this.updateNoteCount(0, mB);
 
-            this.playSound("square", mR[this.noteCount[1]], 0.02, 0, 0.8);
+            this.playSound("square", mR[this.noteCount[1]], 0.015, 0, 0.8);
             this.updateNoteCount(1, mR);
         }
     }
@@ -84,4 +84,13 @@ const mB = [
     61.74, null, null, null, null, null, null, null
 ];
 
-const mR = [61.74, null, 123.47, null];
+const mR = [
+    61.74, null, 123.47, null, 61.74, null, 123.47, null,
+    61.74, null, 123.47, null, 61.74, null, 123.47, null,
+    110, null, 98, null, 110, null, 123.47, null,
+    110, null, 98, null, 110, null, 123.47, 98,
+    61.74, null, 123.47, null, 61.74, null, 123.47, null,
+    61.74, null, 123.47, null, 61.74, null, 123.47, null,
+    110, null, 98, null, 110, null, 123.47, null,
+    110, null, 98, null, 110, null, 246.94, 123.47,
+];

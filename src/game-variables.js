@@ -35,9 +35,9 @@ const characterPos = {
 };
 
 const characterStatus = {
-    [CharacterType.SHIELD]: new CharacterStatus(0, 3, 1, MovType.BOTH),
-    [CharacterType.RANGE]: new CharacterStatus(2, 1, 2, MovType.DIAGONAL),
-    [CharacterType.MELEE]: new CharacterStatus(3, 2, 4, MovType.DIRECTIONAL),
+    [CharacterType.SHIELD]: new CharacterStatus(1, MovType.BOTH),
+    [CharacterType.RANGE]: new CharacterStatus(4, MovType.DIRECTIONAL),
+    [CharacterType.MELEE]: new CharacterStatus(2, MovType.DIAGONAL),
 };
 
 const moveOptionArrowPos = {

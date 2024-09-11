@@ -50,14 +50,14 @@ export class aStar {
                     }
                     break;
 
-                case CharacterType.MELEE:
+                case CharacterType.RANGE:
                     this.addAdjacentNodesToOpenList(s.x + 1, s.y, s.g + 1, s, target, board, (tile) => this.movementValidation(s, tile));
                     this.addAdjacentNodesToOpenList(s.x - 1, s.y, s.g + 1, s, target, board, (tile) => this.movementValidation(s, tile));
                     this.addAdjacentNodesToOpenList(s.x, s.y + 1, s.g + 1, s, target, board, (tile) => this.movementValidation(s, tile));
                     this.addAdjacentNodesToOpenList(s.x, s.y - 1, s.g + 1, s, target, board, (tile) => this.movementValidation(s, tile));
                     break;
 
-                case CharacterType.RANGE:
+                case CharacterType.MELEE:
                     this.addAdjacentNodesToOpenList(s.x + 1, s.y + 1, s.g + 1, s, target, board, (tile) => this.movementValidation(s, tile));
                     this.addAdjacentNodesToOpenList(s.x - 1, s.y - 1, s.g + 1, s, target, board, (tile) => this.movementValidation(s, tile));
                     this.addAdjacentNodesToOpenList(s.x + 1, s.y - 1, s.g + 1, s, target, board, (tile) => this.movementValidation(s, tile));

@@ -13,6 +13,7 @@ export class UI {
 
         this.currentTime = 13;
 
+        this.resetGameBtn();
         this.currentLevelUi();
         this.createTimer();
         this.createZoomBtns();
@@ -22,27 +23,37 @@ export class UI {
         this.createEndModal();
     }
 
+    resetGameBtn() {
+        this.resetLevelBtn = createElem(this.uiDiv, "canvas", null, null, toPixelSize(52), toPixelSize(24), GameVars.isMobile, null, () => {
+            this.game.isRetryLevel = true;
+            GameVars.sound.clickSound();
+        }, () => setTimeout(() => this.resetClick = false, 50));
+        this.resetLevelBtn.style.translate = (GameVars.gameW - this.resetLevelBtn.width - toPixelSize(8)) + 'px ' + (toPixelSize(8)) + 'px';
+        genSmallBox(this.resetLevelBtn, 0, 0, 51, 23, toPixelSize(1), "#9bf2fa", this.resetClick ? "#ffffff66" : "#1b1116");
+        drawPixelTextInCanvas("reset level", this.resetLevelBtn, toPixelSize(1), 26, 12, "#9bf2fa", 1);
+    }
+
     currentLevelUi() {
         const levelUi = createElem(this.uiDiv, "canvas", null, null, toPixelSize(52), toPixelSize(24), GameVars.isMobile, null, () => this.game.board.resetBoardPos());
-        levelUi.style.translate = (GameVars.gameW - levelUi.width - toPixelSize(8)) + 'px ' + (toPixelSize(8)) + 'px';
+        levelUi.style.translate = (toPixelSize(8)) + 'px ' + (toPixelSize(8)) + 'px';
         genSmallBox(levelUi, 0, 0, 51, 23, toPixelSize(1), "#3e3846", "#1b1116");
         drawPixelTextInCanvas("level", levelUi, toPixelSize(1), 26, 6, "#00bcd4", 1);
         drawPixelTextInCanvas(this.game.levelIndex + 1, levelUi, toPixelSize(1), 26, 16, "#00bcd4", 2);
     }
 
     createResetBtn() {
-        this.resetBoardBtn = createElem(this.uiDiv, "canvas", null, null, toPixelSize(52), toPixelSize(24), GameVars.isMobile, null, () => {
+        this.resetLevelBtn = createElem(this.uiDiv, "canvas", null, null, toPixelSize(52), toPixelSize(24), GameVars.isMobile, null, () => {
             this.resetClick = true;
             this.game.board.resetBoardPos();
             GameVars.sound.clickSound();
         }, () => setTimeout(() => this.resetClick = false, 50));
-        this.resetBoardBtn.style.translate = (GameVars.gameW - this.resetBoardBtn.width - toPixelSize(8)) + 'px ' + (GameVars.gameH - this.resetBoardBtn.height - toPixelSize(8)) + 'px';
+        this.resetLevelBtn.style.translate = (GameVars.gameW - this.resetLevelBtn.width - toPixelSize(8)) + 'px ' + (GameVars.gameH - this.resetLevelBtn.height - toPixelSize(8)) + 'px';
     }
 
     drawResetBtn() {
-        genSmallBox(this.resetBoardBtn, 0, 0, 51, 23, toPixelSize(1), "#9bf2fa", this.resetClick ? "#ffffff66" : "#1b1116");
-        drawPixelTextInCanvas("RESET BOARD", this.resetBoardBtn, toPixelSize(1), 26, 8, "#9bf2fa", 1);
-        drawPixelTextInCanvas("POSITION", this.resetBoardBtn, toPixelSize(1), 26, 16, "#9bf2fa", 1);
+        genSmallBox(this.resetLevelBtn, 0, 0, 51, 23, toPixelSize(1), "#9bf2fa", this.resetClick ? "#ffffff66" : "#1b1116");
+        drawPixelTextInCanvas("RESET BOARD", this.resetLevelBtn, toPixelSize(1), 26, 8, "#9bf2fa", 1);
+        drawPixelTextInCanvas("POSITION", this.resetLevelBtn, toPixelSize(1), 26, 16, "#9bf2fa", 1);
     }
 
     createTimer() {

@@ -7,8 +7,6 @@ const { drawSprite, createPixelLine } = require("./utilities/draw-utilities");
 const { ShieldSwatBottom, PlayerSwatColors, EnemySwatColors, RangeSwatBottom, MeleeSwatBottom } = require("./sprites/swat-sprites");
 const { Sound } = require("./sound/sound");
 const { SpeakerSprite, AudioSprite } = require("./sprites/sound-sprites");
-const { Level } = require("./entities/level");
-const { Levels } = require("./levels");
 
 let mainDiv;
 

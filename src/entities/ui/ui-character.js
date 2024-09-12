@@ -1,7 +1,4 @@
-import { CharacterType } from "../../enum/character-type";
-import { DirectionType } from "../../enum/direction-type";
 import { GameVars, toPixelSize } from "../../game-variables";
-import { MeleeSwatBottom, PlayerSwatColors, RangeSwatBottom, ShieldSwatBottom } from "../../sprites/swat-sprites";
 import { genSmallBox } from "../../utilities/box-generator";
 import { drawSprite } from "../../utilities/draw-utilities";
 import { createElem } from "../../utilities/elem-utilities";

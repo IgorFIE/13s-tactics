@@ -140,6 +140,32 @@ export const Levels = [
     ),
     new Level(
         [
+            new Point(0, 0), new Point(1, 0), new Point(2, 0), new Point(3, 0), new Point(4, 0),
+            new Point(5, 0), new Point(6, 0), new Point(7, 0), new Point(8, 0),
+            new Point(0, 1), new Point(1, 1), new Point(2, 1), new Point(4, 1), new Point(6, 1), new Point(7, 1), new Point(8, 1),
+            new Point(2, 2), new Point(6, 2), new Point(8, 2),
+            new Point(1, 3), new Point(2, 3), new Point(6, 3), new Point(7, 3),
+            new Point(2, 4), new Point(3, 4), new Point(5, 4), new Point(6, 4),
+            new Point(4, 7), new Point(5, 7), new Point(6, 7),
+        ],
+        [
+            [CharacterType.SHIELD, new Point(5, 5), DirectionType.LEFT],
+            [CharacterType.SHIELD, new Point(3, 7), DirectionType.UP],
+            [CharacterType.MELEE, new Point(7, 6), DirectionType.UP],
+        ],
+        [
+            [CharacterType.RANGE, new Point(4, 1), DirectionType.DOWN],
+
+            [CharacterType.RANGE, new Point(1, 2), DirectionType.LEFT],
+            [CharacterType.MELEE, new Point(7, 2), DirectionType.RIGHT],
+
+            [CharacterType.SHIELD, new Point(3, 3), DirectionType.DOWN],
+            [CharacterType.SHIELD, new Point(4, 3), DirectionType.DOWN],
+            [CharacterType.SHIELD, new Point(5, 3), DirectionType.DOWN],
+        ]
+    ),
+    new Level(
+        [
             new Point(8, 0), new Point(6, 2), new Point(8, 4),
 
             new Point(0, 3), new Point(0, 4), new Point(1, 4), new Point(1, 5), new Point(2, 5),
@@ -163,32 +189,6 @@ export const Levels = [
             [CharacterType.RANGE, new Point(8, 4), DirectionType.LEFT],
 
             [CharacterType.MELEE, new Point(0, 8), DirectionType.RIGHT],
-        ]
-    ),
-    new Level(
-        [
-            new Point(0, 0), new Point(1, 0), new Point(2, 0), new Point(3, 0), new Point(4, 0),
-            new Point(5, 0), new Point(6, 0), new Point(7, 0), new Point(8, 0),
-            new Point(0, 1), new Point(1, 1), new Point(2, 1), new Point(4, 1), new Point(6, 1), new Point(7, 1), new Point(8, 1),
-            new Point(2, 2), new Point(6, 2), new Point(8, 2),
-            new Point(1, 3), new Point(2, 3), new Point(6, 3), new Point(7, 3),
-            new Point(2, 4), new Point(3, 4), new Point(5, 4), new Point(6, 4),
-            new Point(4, 7), new Point(5, 7), new Point(6, 7),
-        ],
-        [
-            [CharacterType.SHIELD, new Point(5, 5), DirectionType.LEFT],
-            [CharacterType.SHIELD, new Point(3, 7), DirectionType.UP],
-            [CharacterType.MELEE, new Point(7, 6), DirectionType.UP],
-        ],
-        [
-            [CharacterType.RANGE, new Point(4, 1), DirectionType.DOWN],
-
-            [CharacterType.RANGE, new Point(1, 2), DirectionType.LEFT],
-            [CharacterType.MELEE, new Point(7, 2), DirectionType.RIGHT],
-
-            [CharacterType.SHIELD, new Point(3, 3), DirectionType.DOWN],
-            [CharacterType.SHIELD, new Point(4, 3), DirectionType.DOWN],
-            [CharacterType.SHIELD, new Point(5, 3), DirectionType.DOWN],
         ]
     ),
     new Level(

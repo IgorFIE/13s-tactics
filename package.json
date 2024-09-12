@@ -1,7 +1,7 @@
 {
   "name": "13s-tactics",
   "version": "1.0.0",
-  "description": "js13k 2024 game",
+  "description": "13 second Tactics is a simple tactical/chess/puzzle game for js13k 2024 games were the theme was Triskaidekaphobia.",
   "scripts": {
     "start": "webpack serve --open",
     "build": "npx webpack --config webpack.config.js",
